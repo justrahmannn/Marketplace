@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Hesab | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace</div>
+        <div class="nav-links">
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link"
+                style="color: var(--text-primary)">Hesab</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;">Hesabım</h1>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="card">
+                <h2 style="margin-bottom: 1.5rem;">Şəxsi Məlumatlar</h2>
+
+                <div class="form-group">
+                    <label>Ad</label>
+                    <input type="text" th:value="${customer.name}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label>Soyad</label>
+                    <input type="text" th:value="${customer.surname}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" th:value="${customer.email}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label>Kart Nömrəsi</label>
+                    <input type="text" th:value="${customer.cardNumber}" readonly />
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 1.5rem;">Balans</h2>
+
+                <div style="text-align: center; padding: 3rem 0;">
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Mövcud Balans
+                    </div>
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--accent-color);">
+                        <span th:text="${customer.balance}">0.00</span> ₼
+                    </div>
+                </div>
+
+                <div style="border-top: var(--glass-border); padding-top: 1.5rem; margin-top: 1.5rem;">
+                    <h3 style="margin-bottom: 1rem;">Balans Artır</h3>
+                    <form action="/customer/account/increase-balance" method="post" style="display: flex; gap: 1rem;">
+                        <input type="hidden" name="userId" th:value="${userId}" />
+                        <input type="number" name="amount" placeholder="Məbləğ daxil edin" min="1" step="0.01" required
+                            style="flex: 1;" />
+                        <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;">Artır</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">Sifarişlərim</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Məhsul</th>
+                        <th>Miqdar</th>
+                        <th>Məbləğ</th>
+                        <th>Status</th>
+                        <th>Əməliyyat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.product.name}">Məhsul</td>
+                        <td th:text="${order.count}">1</td>
+                        <td th:text="${order.totalAmount} + ' ₼'">0 ₼</td>
+                        <td>
+                            <span th:if="${order.status.name() == 'CREATED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(234, 179, 8, 0.2); color: #fbbf24; border-radius: 4px; font-size: 0.85rem;">Gözləyir</span>
+                            <span th:if="${order.status.name() == 'ACCEPTED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 4px; font-size: 0.85rem;">Qəbul
+                                Edildi</span>
+                            <span th:if="${order.status.name() == 'DELIVERED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 4px; font-size: 0.85rem;">Çatdırıldı</span>
+                            <span th:if="${order.status.name() == 'REJECT_BY_MERCHANT'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;">Rədd
+                                Edildi</span>
+                            <span th:if="${order.status.name() == 'REJECT_BY_CUSTOMER'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;">Ləğv
+                                Edildi</span>
+                        </td>
+                        <td>
+                            <form th:if="${order.status.name() == 'CREATED'}"
+                                th:action="@{/customer/order/cancel/{id}(id=${order.id})}" method="post"
+                                style="margin: 0;">
+                                <input type="hidden" name="userId" th:value="${userId}" />
+                                <button type="submit"
+                                    onclick="return confirm('Sifarişi ləğv etmək istədiyinizdən əminsiniz?')"
+                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;">Ləğv
+                                    Et</button>
+                            </form>
+                            <span th:unless="${order.status.name() == 'CREATED'}"
+                                style="color: var(--text-secondary); font-size: 0.9rem;">-</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

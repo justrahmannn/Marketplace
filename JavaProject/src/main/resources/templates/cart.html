@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Səbət | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace</div>
+        <div class="nav-links">
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link"
+                style="color: var(--text-primary)">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link">Hesab</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;">Alış-Veriş Səbəti</h1>
+
+        <div th:if="${error}"
+            style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;"
+            th:text="${error}"></div>
+
+        <div th:if="${cart.items.empty}" class="card" style="text-align: center; padding: 4rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
+            <h2 style="margin-bottom: 1rem;">Səbətiniz boşdur</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Hələ heç nə əlavə etməmisiniz.</p>
+            <a th:href="@{/customer/products(userId=${userId})}" class="btn-secondary"
+                style="padding: 0.75rem 1.5rem; border-radius: 8px; background: var(--accent-color); color: white;">Alış-Verişə
+                Başla</a>
+        </div>
+
+        <div th:unless="${cart.items.empty}" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Məhsul</th>
+                            <th>Qiymət</th>
+                            <th>Miqdar</th>
+                            <th>Cəmi</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${cart.items}">
+                            <td style="display: flex; align-items: center; gap: 1rem;">
+                                <div
+                                    style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                </div>
+                                <span th:text="${item.product.name}">Məhsul</span>
+                            </td>
+                            <td th:text="${item.product.price} + ' ₼'">0.00 ₼</td>
+                            <td th:text="${item.count}">1</td>
+                            <td th:text="${item.product.price * item.count} + ' ₼'">0.00 ₼</td>
+                            <td>
+                                <form action="/customer/cart/remove" method="post">
+                                    <input type="hidden" name="userId" th:value="${userId}" />
+                                    <input type="hidden" name="cartItemId" th:value="${item.id}" />
+                                    <button type="submit"
+                                        style="background: none; color: var(--danger-color); padding: 0; width: auto;">✕</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="height: fit-content;">
+                <h2 style="margin-bottom: 1.5rem;">Xülasə</h2>
+                <div
+                    style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
+                    <span>Ara Cəm</span>
+                    <span>Ödəniş zamanı hesablanacaq</span>
+                </div>
+                <div style="border-top: var(--glass-border); margin: 1rem 0;"></div>
+                <form action="/customer/order" method="post">
+                    <input type="hidden" name="userId" th:value="${userId}" />
+                    <button type="submit">Ödənişə Keç</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

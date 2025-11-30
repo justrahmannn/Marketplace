@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Sifarişlər | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace - Satıcı Paneli</div>
+        <div class="nav-links">
+            <a th:href="@{/merchant/dashboard(merchantId=${merchantId})}" class="nav-link">Ana Səhifə</a>
+            <a th:href="@{/merchant/products(merchantId=${merchantId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/merchant/orders(merchantId=${merchantId})}" class="nav-link"
+                style="color: var(--text-primary)">Sifarişlər</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;">Sifarişlər</h1>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sifariş ID</th>
+                        <th>Müştəri</th>
+                        <th>Məhsul</th>
+                        <th>Miqdar</th>
+                        <th>Məbləğ</th>
+                        <th>Status</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.id}">#1</td>
+                        <td th:text="${order.customer.name + ' ' + order.customer.surname}">Müştəri</td>
+                        <td th:text="${order.product.name}">Məhsul</td>
+                        <td th:text="${order.count}">1</td>
+                        <td th:text="${order.totalAmount} + ' ₼'">0 ₼</td>
+                        <td>
+                            <span th:if="${order.status.name() == 'CREATED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(234, 179, 8, 0.2); color: #fbbf24; border-radius: 4px; font-size: 0.85rem;">Gözləyir</span>
+                            <span th:if="${order.status.name() == 'ACCEPTED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 4px; font-size: 0.85rem;">Qəbul
+                                Edildi</span>
+                            <span th:if="${order.status.name() == 'DELIVERED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 4px; font-size: 0.85rem;">Çatdırıldı</span>
+                            <span th:if="${order.status.name() == 'REJECT_BY_MERCHANT'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;">Rədd
+                                Edildi</span>
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;" th:if="${order.status.name() == 'CREATED'}">
+                                <form th:action="@{/merchant/orders/{id}/accept(id=${order.id})}" method="post"
+                                    style="margin: 0;">
+                                    <input type="hidden" name="merchantId" th:value="${merchantId}" />
+                                    <button type="submit"
+                                        style="padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 6px; font-size: 0.9rem;">Qəbul
+                                        Et</button>
+                                </form>
+                                <button onclick="showRejectModal(this)" th:attr="data-order-id=${order.id}"
+                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;">Rədd
+                                    Et</button>
+                            </div>
+                            <div th:if="${order.status.name() == 'ACCEPTED'}">
+                                <form th:action="@{/merchant/orders/{id}/deliver(id=${order.id})}" method="post"
+                                    style="margin: 0;">
+                                    <input type="hidden" name="merchantId" th:value="${merchantId}" />
+                                    <button type="submit"
+                                        style="padding: 0.5rem 1rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 6px; font-size: 0.9rem;">Çatdır</button>
+                                </form>
+                            </div>
+                            <span
+                                th:if="${order.status.name() == 'DELIVERED' || order.status.name() == 'REJECT_BY_MERCHANT'}"
+                                style="color: var(--text-secondary); font-size: 0.9rem;">-</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div id="rejectModal"
+        style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="card" style="max-width: 500px; margin: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;">Sifarişi Rədd Et</h2>
+            <form id="rejectForm" method="post">
+                <input type="hidden" name="merchantId" th:value="${merchantId}" />
+                <div class="form-group">
+                    <label>Rədd Səbəbi</label>
+                    <textarea name="reason" placeholder="Səbəbi qeyd edin..." rows="4" required></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button type="button" onclick="closeRejectModal()" style="flex: 1; background: var(--card-bg);">Ləğv
+                        Et</button>
+                    <button type="submit" style="flex: 1; background: var(--danger-color);">Rədd Et</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showRejectModal(button) {
+            const orderId = button.getAttribute('data-order-id');
+            const form = document.getElementById('rejectForm');
+            form.action = '/merchant/orders/' + orderId + '/reject';
+            document.getElementById('rejectModal').style.display = 'flex';
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>

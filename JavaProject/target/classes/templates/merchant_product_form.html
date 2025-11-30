@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:text="${product.id != null ? 'Məhsulu Redaktə Et' : 'Yeni Məhsul Əlavə Et'}">Məhsul | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace - Satıcı Paneli</div>
+        <div class="nav-links">
+            <a th:href="@{/merchant/dashboard(merchantId=${merchantId})}" class="nav-link">Ana Səhifə</a>
+            <a th:href="@{/merchant/products(merchantId=${merchantId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/merchant/orders(merchantId=${merchantId})}" class="nav-link">Sifarişlər</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <a th:href="@{/merchant/products(merchantId=${merchantId})}"
+            style="display: inline-block; margin-bottom: 2rem; color: var(--text-secondary);">← Məhsullara Qayıt</a>
+
+        <div class="card" style="max-width: 800px; margin: 0 auto;">
+            <h1 th:text="${product.id != null ? 'Məhsulu Redaktə Et' : 'Yeni Məhsul Əlavə Et'}"
+                style="margin-bottom: 2rem;">Məhsul</h1>
+
+            <form th:action="${product.id != null ? '/merchant/products/edit/' + product.id : '/merchant/products/add'}"
+                method="post" th:object="${product}">
+                <input type="hidden" name="merchantId" th:value="${merchantId}" />
+
+                <div class="form-group">
+                    <label>Məhsul Adı</label>
+                    <input type="text" th:field="*{name}" placeholder="Məsələn: iPhone 15 Pro" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Təsvir</label>
+                    <textarea th:field="*{details}" placeholder="Məhsul haqqında ətraflı məlumat" rows="4"
+                        required></textarea>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Qiymət (₼)</label>
+                        <input type="number" th:field="*{price}" step="0.01" min="0" placeholder="0.00" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stok Sayı</label>
+                        <input type="number" th:field="*{stockCount}" min="0" placeholder="0" required />
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Kateqoriya</label>
+                        <select th:field="*{category.id}" required>
+                            <option value="">Seçin...</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}">Kateqoriya
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Brend</label>
+                        <select th:field="*{brand.id}" required>
+                            <option value="">Seçin...</option>
+                            <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}">Brend
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" style="width: 100%; margin-top: 1rem;"
+                    th:text="${product.id != null ? 'Yenilə' : 'Əlavə Et'}">Əlavə Et</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

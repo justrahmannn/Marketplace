@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Satıcı Girişi | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="card auth-card animate-fade-in">
+            <a href="/" style="display: inline-block; margin-bottom: 1rem; color: var(--text-secondary);">← Geri</a>
+            <h1 class="auth-title">Satıcı Girişi 🏪</h1>
+
+            <div th:if="${error}"
+                style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;"
+                th:text="${error}"></div>
+
+            <form action="/auth/merchant/login" method="post">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="email@example.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Şifrə</label>
+                    <input type="password" name="password" placeholder="Şifrənizi daxil edin" required />
+                </div>
+                <button type="submit">Daxil Ol</button>
+            </form>
+
+            <div style="margin-top: 1.5rem; text-align: center; color: var(--text-secondary);">
+                Hesabınız yoxdur? <a href="/auth/merchant/register">Qeydiyyatdan keçin</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

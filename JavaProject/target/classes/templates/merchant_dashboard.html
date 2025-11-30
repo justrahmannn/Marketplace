@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Satıcı Paneli | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace - Satıcı Paneli</div>
+        <div class="nav-links">
+            <a th:href="@{/merchant/dashboard(merchantId=${merchantId})}" class="nav-link"
+                style="color: var(--text-primary)">Ana Səhifə</a>
+            <a th:href="@{/merchant/products(merchantId=${merchantId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/merchant/orders(merchantId=${merchantId})}" class="nav-link">Sifarişlər</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;">Xoş Gəldiniz, <span th:text="${merchant.companyName}">Şirkət</span>!</h1>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-bottom: 3rem;">
+            <div class="card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+                <h2 th:text="${productCount}">0</h2>
+                <p style="color: var(--text-secondary);">Məhsullar</p>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">📋</div>
+                <h2 th:text="${orderCount}">0</h2>
+                <p style="color: var(--text-secondary);">Sifarişlər</p>
+            </div>
+
+            <div class="card" style="text-align: center; padding: 2rem;">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">⏳</div>
+                <h2 th:text="${pendingOrderCount}">0</h2>
+                <p style="color: var(--text-secondary);">Gözləyən Sifarişlər</p>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 2rem;">
+            <a th:href="@{/merchant/products/add(merchantId=${merchantId})}"
+                style="flex: 1; padding: 2rem; background: var(--accent-color); color: white; border-radius: 12px; text-align: center; font-size: 1.2rem; font-weight: 600;">
+                + Yeni Məhsul Əlavə Et
+            </a>
+            <a th:href="@{/merchant/orders(merchantId=${merchantId})}"
+                style="flex: 1; padding: 2rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 12px; text-align: center; font-size: 1.2rem; font-weight: 600;">
+                Sifarişləri İdarə Et
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

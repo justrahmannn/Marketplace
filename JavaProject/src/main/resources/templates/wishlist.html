@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>İstək Siyahısı | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace</div>
+        <div class="nav-links">
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link"
+                style="color: var(--text-primary)">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link">Hesab</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;">İstək Siyahım</h1>
+
+        <div th:if="${wishlist.empty}" class="card" style="text-align: center; padding: 4rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">♥</div>
+            <h2 style="margin-bottom: 1rem;">İstək siyahınız boşdur</h2>
+            <a th:href="@{/customer/products(userId=${userId})}" style="color: var(--accent-color);">Məhsullara Bax</a>
+        </div>
+
+        <div th:unless="${wishlist.empty}" class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Məhsul</th>
+                        <th>Qiymət</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="item : ${wishlist}">
+                        <td style="display: flex; align-items: center; gap: 1rem;">
+                            <div
+                                style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                            </div>
+                            <span th:text="${item.product.name}">Məhsul</span>
+                        </td>
+                        <td th:text="${item.product.price} + ' ₼'">0.00 ₼</td>
+                        <td>
+                            <div style="display: flex; gap: 1rem; align-items: center;">
+                                <form action="/customer/cart/add" method="post" style="margin: 0;">
+                                    <input type="hidden" name="userId" th:value="${userId}" />
+                                    <input type="hidden" name="productId" th:value="${item.product.id}" />
+                                    <input type="hidden" name="count" value="1" />
+                                    <button type="submit" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Səbətə
+                                        At</button>
+                                </form>
+                                <form action="/customer/wishlist/remove" method="post" style="margin: 0;">
+                                    <input type="hidden" name="userId" th:value="${userId}" />
+                                    <input type="hidden" name="wishlistId" th:value="${item.id}" />
+                                    <button type="submit"
+                                        style="background: none; color: var(--danger-color); padding: 0; width: auto;">Sil</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

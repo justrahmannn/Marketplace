@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Məhsullarım | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace - Satıcı Paneli</div>
+        <div class="nav-links">
+            <a th:href="@{/merchant/dashboard(merchantId=${merchantId})}" class="nav-link">Ana Səhifə</a>
+            <a th:href="@{/merchant/products(merchantId=${merchantId})}" class="nav-link"
+                style="color: var(--text-primary)">Məhsullar</a>
+            <a th:href="@{/merchant/orders(merchantId=${merchantId})}" class="nav-link">Sifarişlər</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <h1 style="margin: 0;">Məhsullarım</h1>
+            <a th:href="@{/merchant/products/add(merchantId=${merchantId})}"
+                style="padding: 0.75rem 1.5rem; background: var(--accent-color); color: white; border-radius: 8px;">+
+                Yeni Məhsul</a>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ad</th>
+                        <th>Brend</th>
+                        <th>Kateqoriya</th>
+                        <th>Qiymət</th>
+                        <th>Stok</th>
+                        <th>Əməliyyatlar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="product : ${products}">
+                        <td th:text="${product.name}">Məhsul</td>
+                        <td th:text="${product.brand.name}">Brend</td>
+                        <td th:text="${product.category.name}">Kateqoriya</td>
+                        <td th:text="${product.price} + ' ₼'">0 ₼</td>
+                        <td th:text="${product.stockCount}">0</td>
+                        <td>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <a th:href="@{/merchant/products/edit/{id}(id=${product.id}, merchantId=${merchantId})}"
+                                    style="padding: 0.5rem 1rem; background: rgba(139, 92, 246, 0.2); color: var(--accent-color); border-radius: 6px; font-size: 0.9rem;">Redaktə</a>
+                                <form th:action="@{/merchant/products/delete/{id}(id=${product.id})}" method="post"
+                                    style="margin: 0;">
+                                    <input type="hidden" name="merchantId" th:value="${merchantId}" />
+                                    <button type="submit" onclick="return confirm('Silmək istədiyinizdən əminsiniz?')"
+                                        style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;">Sil</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>

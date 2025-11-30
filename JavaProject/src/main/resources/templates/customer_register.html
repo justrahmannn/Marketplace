@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Alıcı Qeydiyyatı | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="card auth-card animate-fade-in">
+            <a href="/auth/customer/login"
+                style="display: inline-block; margin-bottom: 1rem; color: var(--text-secondary);">← Geri</a>
+            <h1 class="auth-title">Alıcı Qeydiyyatı 🛍️</h1>
+
+            <form action="/auth/customer/register" method="post">
+                <div class="form-group">
+                    <label>Ad</label>
+                    <input type="text" name="name" placeholder="Adınız" required />
+                </div>
+                <div class="form-group">
+                    <label>Soyad</label>
+                    <input type="text" name="surname" placeholder="Soyadınız" required />
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="email@example.com" required />
+                </div>
+                <div class="form-group">
+                    <label>Şifrə</label>
+                    <input type="password" name="password" placeholder="Güclü şifrə seçin" minlength="6" required />
+                </div>
+                <button type="submit">Hesab Yarat</button>
+            </form>
+
+            <div style="margin-top: 1.5rem; text-align: center; color: var(--text-secondary);">
+                Artıq hesabınız var? <a href="/auth/customer/login">Daxil olun</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
