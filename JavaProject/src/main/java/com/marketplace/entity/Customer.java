@@ -18,8 +18,10 @@ public class Customer extends User {
 
     @Column(unique = true, nullable = false)
     private String email;
-    
+
     private String cardNumber;
-    
+    private String cardExpiryDate;
+    private String cardCvv;
+
     private BigDecimal balance = BigDecimal.ZERO;
 }

@@ -18,13 +18,13 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/products")
-    public String listProducts(@RequestParam Long userId, 
-                              @RequestParam(required = false) String search,
-                              @RequestParam(required = false) Long categoryId,
-                              @RequestParam(required = false) Long brandId,
-                              Model model) {
+    public String listProducts(@RequestParam Long userId,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Long brandId,
+            Model model) {
         List<Product> products;
-        
+
         if (search != null && !search.isEmpty()) {
             products = customerService.searchProducts(search);
         } else if (categoryId != null) {
@@ -34,7 +34,7 @@ public class CustomerController {
         } else {
             products = customerService.getAllProducts();
         }
-        
+
         model.addAttribute("products", products);
         model.addAttribute("categories", customerService.getAllCategories());
         model.addAttribute("brands", customerService.getAllBrands());
@@ -50,7 +50,7 @@ public class CustomerController {
         model.addAttribute("userId", userId);
         return "product_detail";
     }
-    
+
     @GetMapping("/account")
     public String viewAccount(@RequestParam Long userId, Model model) {
         model.addAttribute("customer", customerService.getCustomer(userId));
@@ -68,6 +68,7 @@ public class CustomerController {
     @GetMapping("/cart")
     public String viewCart(@RequestParam Long userId, Model model) {
         model.addAttribute("cart", customerService.getCart(userId));
+        model.addAttribute("totalAmount", customerService.getCartTotal(userId));
         model.addAttribute("userId", userId);
         return "cart";
     }
@@ -86,11 +87,12 @@ public class CustomerController {
         } catch (RuntimeException e) {
             model.addAttribute("error", e.getMessage());
             model.addAttribute("cart", customerService.getCart(userId));
+            model.addAttribute("totalAmount", customerService.getCartTotal(userId));
             model.addAttribute("userId", userId);
             return "cart";
         }
     }
-    
+
     @GetMapping("/order-success")
     public String orderSuccess(@RequestParam Long userId, Model model) {
         model.addAttribute("userId", userId);
@@ -98,13 +100,30 @@ public class CustomerController {
         model.addAttribute("orders", customerService.getCustomerOrders(userId));
         return "order_success";
     }
-    
+
     @PostMapping("/account/increase-balance")
-    public String increaseBalance(@RequestParam Long userId, @RequestParam BigDecimal amount) {
-        customerService.increaseBalance(userId, amount);
+    public String increaseBalance(@RequestParam Long userId, @RequestParam BigDecimal amount, Model model) {
+        try {
+            customerService.increaseBalance(userId, amount);
+            return "redirect:/customer/account?userId=" + userId;
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("customer", customerService.getCustomer(userId));
+            model.addAttribute("orders", customerService.getCustomerOrders(userId));
+            model.addAttribute("userId", userId);
+            return "account";
+        }
+    }
+
+    @PostMapping("/account/add-card")
+    public String addCard(@RequestParam Long userId,
+            @RequestParam String cardNumber,
+            @RequestParam String cardExpiryDate,
+            @RequestParam String cardCvv) {
+        customerService.addCard(userId, cardNumber, cardExpiryDate, cardCvv);
         return "redirect:/customer/account?userId=" + userId;
     }
-    
+
     @PostMapping("/order/cancel/{orderId}")
     public String cancelOrder(@PathVariable Long orderId, @RequestParam Long userId) {
         customerService.cancelOrder(orderId);

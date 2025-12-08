@@ -49,6 +49,10 @@
             <div class="card">
                 <h2 style="margin-bottom: 1.5rem;">Balans</h2>
 
+                <div th:if="${error}"
+                    style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;"
+                    th:text="${error}"></div>
+
                 <div style="text-align: center; padding: 3rem 0;">
                     <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Mövcud Balans
                     </div>
@@ -58,13 +62,66 @@
                 </div>
 
                 <div style="border-top: var(--glass-border); padding-top: 1.5rem; margin-top: 1.5rem;">
-                    <h3 style="margin-bottom: 1rem;">Balans Artır</h3>
-                    <form action="/customer/account/increase-balance" method="post" style="display: flex; gap: 1rem;">
-                        <input type="hidden" name="userId" th:value="${userId}" />
-                        <input type="number" name="amount" placeholder="Məbləğ daxil edin" min="1" step="0.01" required
-                            style="flex: 1;" />
-                        <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;">Artır</button>
-                    </form>
+
+                    <!-- If card exists, show Top Up -->
+                    <div th:if="${customer.cardNumber != null && !customer.cardNumber.isEmpty()}">
+                        <h3 style="margin-bottom: 1rem;">Balans Artır</h3>
+                        <div
+                            style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: var(--glass-border);">
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">
+                                Seçilmiş Kart</div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="font-family: monospace; font-size: 1.1rem;">
+                                    **** **** **** <span
+                                        th:text="${#strings.substring(customer.cardNumber, 12)}">0000</span>
+                                </div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                    <span th:text="${customer.cardExpiryDate}">MM/YY</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form action="/customer/account/increase-balance" method="post"
+                            style="display: flex; gap: 1rem;">
+                            <input type="hidden" name="userId" th:value="${userId}" />
+                            <input type="number" name="amount" placeholder="Məbləğ daxil edin" min="1" step="0.01"
+                                required style="flex: 1;" />
+                            <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;">Artır</button>
+                        </form>
+                    </div>
+
+                    <!-- If no card, show Add Card -->
+                    <div th:unless="${customer.cardNumber != null && !customer.cardNumber.isEmpty()}">
+                        <h3 style="margin-bottom: 1rem;">Bank Kartı Əlavə Et</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;">Balans artırmaq
+                            üçün kart məlumatlarını daxil edin.</p>
+                        <form action="/customer/account/add-card" method="post"
+                            style="display: flex; flex-direction: column; gap: 1rem;">
+                            <input type="hidden" name="userId" th:value="${userId}" />
+
+                            <div class="form-group">
+                                <label>Kart Nömrəsi</label>
+                                <input type="text" name="cardNumber" placeholder="0000 0000 0000 0000" required
+                                    pattern="\d{16}" title="16 rəqəmli kart nömrəsi" maxlength="16" />
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label>Bitmə Tarixi</label>
+                                    <input type="text" name="cardExpiryDate" placeholder="MM/YY" required
+                                        pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Format: MM/YY" maxlength="5" />
+                                </div>
+                                <div class="form-group">
+                                    <label>CVV</label>
+                                    <input type="text" name="cardCvv" placeholder="123" required pattern="\d{3}"
+                                        title="3 rəqəmli CVV kodu" maxlength="3" />
+                                </div>
+                            </div>
+
+                            <button type="submit" style="width: 100%; margin-top: 0.5rem;">Kartı Yadda Saxla</button>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </div>

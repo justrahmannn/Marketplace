@@ -75,7 +75,7 @@
                 <div
                     style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
                     <span>Ara Cəm</span>
-                    <span>Ödəniş zamanı hesablanacaq</span>
+                    <span th:text="${totalAmount} + ' ₼'">0.00 ₼</span>
                 </div>
                 <div style="border-top: var(--glass-border); margin: 1rem 0;"></div>
                 <form action="/customer/order" method="post">

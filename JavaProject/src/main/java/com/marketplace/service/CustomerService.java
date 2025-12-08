@@ -54,7 +54,8 @@ public class CustomerService {
             newItem.setProduct(product);
             newItem.setCount(count);
             // Initialize list if null (though usually handled by JPA/Lombok if initialized)
-            if (cart.getItems() == null) cart.setItems(new ArrayList<>());
+            if (cart.getItems() == null)
+                cart.setItems(new ArrayList<>());
             cart.getItems().add(newItem);
             cartItemRepository.save(newItem);
         }
@@ -79,7 +80,8 @@ public class CustomerService {
         // Check stock availability first
         for (CartItem item : items) {
             if (item.getProduct().getStockCount() < item.getCount()) {
-                throw new RuntimeException(item.getProduct().getName() + " məhsulundan kifayət qədər stok yoxdur. Mövcud: " + item.getProduct().getStockCount());
+                throw new RuntimeException(item.getProduct().getName()
+                        + " məhsulundan kifayət qədər stok yoxdur. Mövcud: " + item.getProduct().getStockCount());
             }
             BigDecimal itemTotal = item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getCount()));
             totalCost = totalCost.add(itemTotal);
@@ -87,13 +89,14 @@ public class CustomerService {
 
         // Check balance
         if (customer.getBalance().compareTo(totalCost) < 0) {
-            throw new RuntimeException("Balans kifayət deyil. Lazım: " + totalCost + " ₼, Mövcud: " + customer.getBalance() + " ₼");
+            throw new RuntimeException(
+                    "Balans kifayət deyil. Lazım: " + totalCost + " ₼, Mövcud: " + customer.getBalance() + " ₼");
         }
 
         // Create orders and reduce stock
         for (CartItem item : items) {
             Product product = item.getProduct();
-            
+
             Order order = new Order();
             order.setCustomer(customer);
             order.setProduct(product);
@@ -101,7 +104,7 @@ public class CustomerService {
             order.setTotalAmount(product.getPrice().multiply(BigDecimal.valueOf(item.getCount())));
             order.setStatus(Order.OrderStatus.CREATED);
             orderRepository.save(order);
-            
+
             // Reduce stock
             product.setStockCount(product.getStockCount() - item.getCount());
             productRepository.save(product);
@@ -135,18 +138,17 @@ public class CustomerService {
     public List<Wishlist> getWishlist(Long customerId) {
         return wishlistRepository.findByCustomerId(customerId);
     }
-    
-    
+
     public List<Product> getAllProducts() {
         return productRepository.findAll().stream()
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
     }
-    
+
     public Product getProduct(Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
     }
-    
+
     public List<Product> searchProducts(String query) {
         if (query == null || query.trim().isEmpty()) {
             return getAllProducts();
@@ -155,67 +157,85 @@ public class CustomerService {
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
     }
-    
+
     public List<Product> filterByCategory(Long categoryId) {
         return productRepository.findByCategoryId(categoryId).stream()
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
     }
-    
+
     public List<Product> filterByBrand(Long brandId) {
         return productRepository.findByBrandId(brandId).stream()
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
     }
-    
+
     public List<Product> filterByPriceRange(BigDecimal minPrice, BigDecimal maxPrice) {
         return productRepository.findByPriceBetween(minPrice, maxPrice).stream()
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
     }
-    
+
     public Customer getCustomer(Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
     }
-    
+
     public void increaseBalance(Long customerId, BigDecimal amount) {
         Customer customer = getCustomer(customerId);
+        if (customer.getCardNumber() == null || customer.getCardNumber().trim().isEmpty()) {
+            throw new RuntimeException("Balans artırmaq üçün əvvəlcə bank kartı əlavə etməlisiniz");
+        }
         customer.setBalance(customer.getBalance().add(amount));
         customerRepository.save(customer);
     }
-    
+
+    public void addCard(Long customerId, String cardNumber, String cardExpiryDate, String cardCvv) {
+        Customer customer = getCustomer(customerId);
+        customer.setCardNumber(cardNumber);
+        customer.setCardExpiryDate(cardExpiryDate);
+        customer.setCardCvv(cardCvv);
+        customerRepository.save(customer);
+    }
+
+    public BigDecimal getCartTotal(Long customerId) {
+        Cart cart = getCart(customerId);
+        return cart.getItems().stream()
+                .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getCount())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     public List<Order> getCustomerOrders(Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
-    
+
     @Transactional
     public void cancelOrder(Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-        
+
         if (order.getStatus() != Order.OrderStatus.CREATED) {
             throw new RuntimeException("Yalnız gözləyən sifarişlər ləğv edilə bilər");
         }
-        
+
         // Refund money
         Customer customer = order.getCustomer();
         customer.setBalance(customer.getBalance().add(order.getTotalAmount()));
         customerRepository.save(customer);
-        
+
         // Restore stock
         Product product = order.getProduct();
         product.setStockCount(product.getStockCount() + order.getCount());
         productRepository.save(product);
-        
+
         // Update order status
         order.setStatus(Order.OrderStatus.REJECT_BY_CUSTOMER);
         orderRepository.save(order);
     }
-    
+
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
-    
+
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
     }
