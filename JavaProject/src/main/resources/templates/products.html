@@ -10,41 +10,56 @@
     <nav class="navbar">
         <div class="nav-brand">Marketplace</div>
         <div class="nav-links">
-            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link"
-                style="color: var(--text-primary)">Məhsullar</a>
-            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link">Səbət</a>
-            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link">İstək Siyahısı</a>
-            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link">Hesab</a>
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link" style="color: var(--text-primary)"
+                th:text="#{customer.nav.products}">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link" th:text="#{customer.nav.cart}">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.wishlist}">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.account}">Hesab</a>
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem;">
+                <a th:href="@{/customer/products(userId=${userId}, lang='az')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'az' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">AZ</a>
+                <span style="color: rgba(255,255,255,0.5);">|</span>
+                <a th:href="@{/customer/products(userId=${userId}, lang='en')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
+            </div>
         </div>
     </nav>
 
     <div class="container animate-fade-in">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <h1 style="margin: 0;">Məhsulları Kəşf Edin</h1>
+            <h1 style="margin: 0;" th:text="#{customer.products.title}">Məhsulları Kəşf Edin</h1>
 
             <form action="/customer/products" method="get" style="display: flex; gap: 1rem; width: 400px;">
                 <input type="hidden" name="userId" th:value="${userId}" />
-                <input type="text" name="search" placeholder="Məhsul axtar..." style="flex: 1;" />
-                <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;">Axtar</button>
+                <input type="text" name="search" th:placeholder="#{customer.products.search.placeholder}"
+                    style="flex: 1;" />
+                <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;"
+                    th:text="#{customer.products.search.button}">Axtar</button>
             </form>
         </div>
 
         <div style="display: grid; grid-template-columns: 250px 1fr; gap: 2rem;">
             <!-- Filter Sidebar -->
             <div class="card" style="height: fit-content;">
-                <h3 style="margin-bottom: 1.5rem;">Filtrlər</h3>
+                <h3 style="margin-bottom: 1.5rem;" th:text="#{customer.products.filters}">Filtrlər</h3>
 
                 <div style="margin-bottom: 2rem;">
-                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary);">Kateqoriyalar</h4>
+                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary);"
+                        th:text="#{customer.products.categories}">Kateqoriyalar</h4>
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <a th:href="@{/customer/products(userId=${userId})}"
                             th:classappend="${selectedCategoryId == null} ? 'active' : ''"
-                            style="padding: 0.5rem; border-radius: 6px; color: var(--text-secondary);">
+                            style="padding: 0.5rem; border-radius: 6px; color: var(--text-secondary);"
+                            th:text="#{customer.products.all}">
                             Hamısı
                         </a>
                         <a th:each="category : ${categories}"
                             th:href="@{/customer/products(userId=${userId}, categoryId=${category.id})}"
-                            th:text="${category.name}"
+                            th:text="${#messages.msgOrNull('category.' + category.name) ?: category.name}"
                             th:classappend="${selectedCategoryId == category.id} ? 'active' : ''"
                             style="padding: 0.5rem; border-radius: 6px; color: var(--text-secondary);">
                             Kateqoriya
@@ -53,11 +68,13 @@
                 </div>
 
                 <div>
-                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary);">Brendlər</h4>
+                    <h4 style="margin-bottom: 1rem; color: var(--text-secondary);"
+                        th:text="#{customer.products.brands}">Brendlər</h4>
                     <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <a th:href="@{/customer/products(userId=${userId})}"
                             th:classappend="${selectedBrandId == null} ? 'active' : ''"
-                            style="padding: 0.5rem; border-radius: 6px; color: var(--text-secondary);">
+                            style="padding: 0.5rem; border-radius: 6px; color: var(--text-secondary);"
+                            th:text="#{customer.products.all}">
                             Hamısı
                         </a>
                         <a th:each="brand : ${brands}"
@@ -77,20 +94,24 @@
                         style="background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'); background-size: cover; background-position: center;">
                     </div>
                     <h3 class="product-title" th:text="${product.name}">Məhsul Adı</h3>
-                    <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.5rem;"
-                        th:text="${product.brand.name}">Brend</div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <div style="font-size: 0.85rem; color: var(--text-secondary);"
+                            th:text="${product.brand != null ? product.brand.name : '-'}">Brend</div>
+                    </div>
                     <div class="product-price" th:text="${product.price} + ' ₼'">0.00 ₼</div>
 
                     <div class="product-actions">
                         <a th:href="@{/customer/products/{id}(id=${product.id}, userId=${userId})}"
                             class="btn-secondary"
-                            style="padding: 0.5rem 1rem; border-radius: 6px; text-align: center; flex: 1;">Bax</a>
+                            style="padding: 0.5rem 1rem; border-radius: 6px; text-align: center; flex: 1;"
+                            th:text="#{customer.products.view}">Bax</a>
 
                         <form action="/customer/cart/add" method="post" style="flex: 1;">
                             <input type="hidden" name="userId" th:value="${userId}" />
                             <input type="hidden" name="productId" th:value="${product.id}" />
                             <input type="hidden" name="count" value="1" />
-                            <button type="submit" style="padding: 0.5rem;">Səbətə At</button>
+                            <button type="submit" style="padding: 0.5rem;"
+                                th:text="#{customer.products.add_to_cart}">Səbətə At</button>
                         </form>
 
                         <form action="/customer/wishlist/add" method="post" style="width: auto;">

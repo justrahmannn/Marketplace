@@ -24,7 +24,7 @@ public class CustomerService {
     private final CategoryRepository categoryRepository;
     private final BrandRepository brandRepository;
 
-    public Cart getCart(Long customerId) {
+    public Cart getCart(@org.springframework.lang.NonNull Long customerId) {
         return cartRepository.findByCustomerId(customerId)
                 .orElseGet(() -> {
                     Customer customer = customerRepository.findById(customerId)
@@ -35,7 +35,8 @@ public class CustomerService {
                 });
     }
 
-    public void addToCart(Long customerId, Long productId, Integer count) {
+    public void addToCart(@org.springframework.lang.NonNull Long customerId,
+            @org.springframework.lang.NonNull Long productId, Integer count) {
         Cart cart = getCart(customerId);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
@@ -61,12 +62,12 @@ public class CustomerService {
         }
     }
 
-    public void removeFromCart(Long cartItemId) {
+    public void removeFromCart(@org.springframework.lang.NonNull Long cartItemId) {
         cartItemRepository.deleteById(cartItemId);
     }
 
     @Transactional
-    public void makeOrder(Long customerId) {
+    public void makeOrder(@org.springframework.lang.NonNull Long customerId) {
         Cart cart = getCart(customerId);
         List<CartItem> items = cart.getItems();
 
@@ -119,7 +120,8 @@ public class CustomerService {
         cartRepository.save(cart);
     }
 
-    public void addToWishlist(Long customerId, Long productId) {
+    public void addToWishlist(@org.springframework.lang.NonNull Long customerId,
+            @org.springframework.lang.NonNull Long productId) {
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         Product product = productRepository.findById(productId)
@@ -131,11 +133,11 @@ public class CustomerService {
         wishlistRepository.save(wishlist);
     }
 
-    public void removeFromWishlist(Long wishlistId) {
+    public void removeFromWishlist(@org.springframework.lang.NonNull Long wishlistId) {
         wishlistRepository.deleteById(wishlistId);
     }
 
-    public List<Wishlist> getWishlist(Long customerId) {
+    public List<Wishlist> getWishlist(@org.springframework.lang.NonNull Long customerId) {
         return wishlistRepository.findByCustomerId(customerId);
     }
 
@@ -145,7 +147,7 @@ public class CustomerService {
                 .toList();
     }
 
-    public Product getProduct(Long productId) {
+    public Product getProduct(@org.springframework.lang.NonNull Long productId) {
         return productRepository.findById(productId).orElseThrow(() -> new RuntimeException("Product not found"));
     }
 
@@ -158,13 +160,13 @@ public class CustomerService {
                 .toList();
     }
 
-    public List<Product> filterByCategory(Long categoryId) {
+    public List<Product> filterByCategory(@org.springframework.lang.NonNull Long categoryId) {
         return productRepository.findByCategoryId(categoryId).stream()
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
     }
 
-    public List<Product> filterByBrand(Long brandId) {
+    public List<Product> filterByBrand(@org.springframework.lang.NonNull Long brandId) {
         return productRepository.findByBrandId(brandId).stream()
                 .filter(p -> p.getStockCount() > 0)
                 .toList();
@@ -176,11 +178,11 @@ public class CustomerService {
                 .toList();
     }
 
-    public Customer getCustomer(Long customerId) {
+    public Customer getCustomer(@org.springframework.lang.NonNull Long customerId) {
         return customerRepository.findById(customerId).orElseThrow(() -> new RuntimeException("Customer not found"));
     }
 
-    public void increaseBalance(Long customerId, BigDecimal amount) {
+    public void increaseBalance(@org.springframework.lang.NonNull Long customerId, BigDecimal amount) {
         Customer customer = getCustomer(customerId);
         if (customer.getCardNumber() == null || customer.getCardNumber().trim().isEmpty()) {
             throw new RuntimeException("Balans artırmaq üçün əvvəlcə bank kartı əlavə etməlisiniz");
@@ -189,7 +191,8 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public void addCard(Long customerId, String cardNumber, String cardExpiryDate, String cardCvv) {
+    public void addCard(@org.springframework.lang.NonNull Long customerId, String cardNumber, String cardExpiryDate,
+            String cardCvv) {
         Customer customer = getCustomer(customerId);
         customer.setCardNumber(cardNumber);
         customer.setCardExpiryDate(cardExpiryDate);
@@ -197,19 +200,19 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public BigDecimal getCartTotal(Long customerId) {
+    public BigDecimal getCartTotal(@org.springframework.lang.NonNull Long customerId) {
         Cart cart = getCart(customerId);
         return cart.getItems().stream()
                 .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getCount())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public List<Order> getCustomerOrders(Long customerId) {
+    public List<Order> getCustomerOrders(@org.springframework.lang.NonNull Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
 
     @Transactional
-    public void cancelOrder(Long orderId) {
+    public void cancelOrder(@org.springframework.lang.NonNull Long orderId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 

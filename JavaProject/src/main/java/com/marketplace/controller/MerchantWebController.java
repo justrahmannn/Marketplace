@@ -20,13 +20,13 @@ public class MerchantWebController {
     private final CustomerService customerService;
 
     @GetMapping("/dashboard")
-    public String dashboard(@RequestParam Long merchantId, Model model) {
+    public String dashboard(@RequestParam long merchantId, Model model) {
         List<Product> products = merchantService.getProducts(merchantId);
         List<Order> orders = merchantService.getOrders(merchantId);
         long pendingOrders = orders.stream()
                 .filter(o -> o.getStatus() == Order.OrderStatus.CREATED)
                 .count();
-        
+
         model.addAttribute("merchant", merchantService.getMerchant(merchantId));
         model.addAttribute("merchantId", merchantId);
         model.addAttribute("productCount", products.size());
@@ -36,14 +36,14 @@ public class MerchantWebController {
     }
 
     @GetMapping("/products")
-    public String listProducts(@RequestParam Long merchantId, Model model) {
+    public String listProducts(@RequestParam long merchantId, Model model) {
         model.addAttribute("products", merchantService.getProducts(merchantId));
         model.addAttribute("merchantId", merchantId);
         return "merchant_products";
     }
 
     @GetMapping("/products/add")
-    public String addProductForm(@RequestParam Long merchantId, Model model) {
+    public String addProductForm(@RequestParam long merchantId, Model model) {
         model.addAttribute("product", new Product());
         model.addAttribute("categories", customerService.getAllCategories());
         model.addAttribute("brands", customerService.getAllBrands());
@@ -52,14 +52,29 @@ public class MerchantWebController {
     }
 
     @PostMapping("/products/add")
-    public String addProduct(@RequestParam Long merchantId, @ModelAttribute Product product) {
+    public String addProduct(@RequestParam long merchantId,
+            @ModelAttribute Product product,
+            @RequestParam(required = false) String newBrandName) {
+        if (newBrandName != null && !newBrandName.trim().isEmpty()) {
+            product.setBrand(merchantService.createBrand(newBrandName));
+        }
         merchantService.addProduct(merchantId, product);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 
     @GetMapping("/products/edit/{productId}")
-    public String editProductForm(@PathVariable Long productId, @RequestParam Long merchantId, Model model) {
-        model.addAttribute("product", merchantService.getProduct(productId));
+    public String editProductForm(@PathVariable long productId, @RequestParam(required = false) Long merchantId,
+            Model model) {
+        Product product = merchantService.getProduct(productId);
+        if (merchantId == null) {
+            if (product.getMerchant() != null) {
+                merchantId = product.getMerchant().getId();
+            } else {
+                // Fallback or error handling if product has no merchant (should not happen)
+                throw new RuntimeException("Product has no associated merchant");
+            }
+        }
+        model.addAttribute("product", product);
         model.addAttribute("categories", customerService.getAllCategories());
         model.addAttribute("brands", customerService.getAllBrands());
         model.addAttribute("merchantId", merchantId);
@@ -67,38 +82,44 @@ public class MerchantWebController {
     }
 
     @PostMapping("/products/edit/{productId}")
-    public String editProduct(@PathVariable Long productId, @RequestParam Long merchantId, @ModelAttribute Product product) {
+    public String editProduct(@PathVariable long productId,
+            @RequestParam long merchantId,
+            @ModelAttribute Product product,
+            @RequestParam(required = false) String newBrandName) {
+        if (newBrandName != null && !newBrandName.trim().isEmpty()) {
+            product.setBrand(merchantService.createBrand(newBrandName));
+        }
         merchantService.updateProduct(productId, product);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 
     @PostMapping("/products/delete/{productId}")
-    public String deleteProduct(@PathVariable Long productId, @RequestParam Long merchantId) {
+    public String deleteProduct(@PathVariable long productId, @RequestParam long merchantId) {
         merchantService.deleteProduct(productId);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 
     @GetMapping("/orders")
-    public String listOrders(@RequestParam Long merchantId, Model model) {
+    public String listOrders(@RequestParam long merchantId, Model model) {
         model.addAttribute("orders", merchantService.getOrders(merchantId));
         model.addAttribute("merchantId", merchantId);
         return "merchant_orders";
     }
 
     @PostMapping("/orders/{orderId}/accept")
-    public String acceptOrder(@PathVariable Long orderId, @RequestParam Long merchantId) {
+    public String acceptOrder(@PathVariable long orderId, @RequestParam long merchantId) {
         merchantService.acceptOrder(orderId);
         return "redirect:/merchant/orders?merchantId=" + merchantId;
     }
 
     @PostMapping("/orders/{orderId}/deliver")
-    public String deliverOrder(@PathVariable Long orderId, @RequestParam Long merchantId) {
+    public String deliverOrder(@PathVariable long orderId, @RequestParam long merchantId) {
         merchantService.deliverOrder(orderId);
         return "redirect:/merchant/orders?merchantId=" + merchantId;
     }
 
     @PostMapping("/orders/{orderId}/reject")
-    public String rejectOrder(@PathVariable Long orderId, @RequestParam Long merchantId, @RequestParam String reason) {
+    public String rejectOrder(@PathVariable long orderId, @RequestParam long merchantId, @RequestParam String reason) {
         merchantService.rejectOrder(orderId, reason);
         return "redirect:/merchant/orders?merchantId=" + merchantId;
     }

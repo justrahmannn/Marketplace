@@ -2,35 +2,46 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>Sifarişlər | Marketplace</title>
+    <title th:text="#{orders.title}">Sifarişlər | Marketplace</title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
     <nav class="navbar">
-        <div class="nav-brand">Marketplace - Satıcı Paneli</div>
+        <div class="nav-brand" th:text="#{nav.brand}">Marketplace - Satıcı Paneli</div>
         <div class="nav-links">
-            <a th:href="@{/merchant/dashboard(merchantId=${merchantId})}" class="nav-link">Ana Səhifə</a>
-            <a th:href="@{/merchant/products(merchantId=${merchantId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/merchant/dashboard(merchantId=${merchantId})}" class="nav-link" th:text="#{nav.home}">Ana
+                Səhifə</a>
+            <a th:href="@{/merchant/products(merchantId=${merchantId})}" class="nav-link"
+                th:text="#{nav.products}">Məhsullar</a>
             <a th:href="@{/merchant/orders(merchantId=${merchantId})}" class="nav-link"
-                style="color: var(--text-primary)">Sifarişlər</a>
+                style="color: var(--text-primary)" th:text="#{nav.orders}">Sifarişlər</a>
+            <div style="margin-left: 1rem; color: var(--text-secondary);">
+                <a th:href="@{/merchant/orders(merchantId=${merchantId}, lang='az')}"
+                    style="color: inherit; text-decoration: none;"
+                    th:style="${#locale.language == 'az' ? 'font-weight: bold; color: var(--accent-color);' : ''}">AZ</a>
+                |
+                <a th:href="@{/merchant/orders(merchantId=${merchantId}, lang='en')}"
+                    style="color: inherit; text-decoration: none;"
+                    th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : ''}">EN</a>
+            </div>
         </div>
     </nav>
 
     <div class="container animate-fade-in">
-        <h1 style="margin-bottom: 2rem;">Sifarişlər</h1>
+        <h1 style="margin-bottom: 2rem;" th:text="#{orders.header}">Sifarişlər</h1>
 
         <div class="card">
             <table>
                 <thead>
                     <tr>
-                        <th>Sifariş ID</th>
-                        <th>Müştəri</th>
-                        <th>Məhsul</th>
-                        <th>Miqdar</th>
-                        <th>Məbləğ</th>
-                        <th>Status</th>
-                        <th>Əməliyyatlar</th>
+                        <th th:text="#{orders.table.id}">Sifariş ID</th>
+                        <th th:text="#{orders.table.customer}">Müştəri</th>
+                        <th th:text="#{orders.table.product}">Məhsul</th>
+                        <th th:text="#{orders.table.count}">Miqdar</th>
+                        <th th:text="#{orders.table.amount}">Məbləğ</th>
+                        <th th:text="#{orders.table.status}">Status</th>
+                        <th th:text="#{orders.table.actions}">Əməliyyatlar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,14 +53,18 @@
                         <td th:text="${order.totalAmount} + ' ₼'">0 ₼</td>
                         <td>
                             <span th:if="${order.status.name() == 'CREATED'}"
-                                style="padding: 0.25rem 0.75rem; background: rgba(234, 179, 8, 0.2); color: #fbbf24; border-radius: 4px; font-size: 0.85rem;">Gözləyir</span>
+                                style="padding: 0.25rem 0.75rem; background: rgba(234, 179, 8, 0.2); color: #fbbf24; border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.created}">Gözləyir</span>
                             <span th:if="${order.status.name() == 'ACCEPTED'}"
-                                style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 4px; font-size: 0.85rem;">Qəbul
+                                style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.accepted}">Qəbul
                                 Edildi</span>
                             <span th:if="${order.status.name() == 'DELIVERED'}"
-                                style="padding: 0.25rem 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 4px; font-size: 0.85rem;">Çatdırıldı</span>
+                                style="padding: 0.25rem 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.delivered}">Çatdırıldı</span>
                             <span th:if="${order.status.name() == 'REJECT_BY_MERCHANT'}"
-                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;">Rədd
+                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.rejected}">Rədd
                                 Edildi</span>
                         </td>
                         <td>
@@ -58,11 +73,13 @@
                                     style="margin: 0;">
                                     <input type="hidden" name="merchantId" th:value="${merchantId}" />
                                     <button type="submit"
-                                        style="padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 6px; font-size: 0.9rem;">Qəbul
+                                        style="padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 6px; font-size: 0.9rem;"
+                                        th:text="#{orders.action.accept}">Qəbul
                                         Et</button>
                                 </form>
                                 <button onclick="showRejectModal(this)" th:attr="data-order-id=${order.id}"
-                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;">Rədd
+                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;"
+                                    th:text="#{orders.action.reject}">Rədd
                                     Et</button>
                             </div>
                             <div th:if="${order.status.name() == 'ACCEPTED'}">
@@ -70,7 +87,8 @@
                                     style="margin: 0;">
                                     <input type="hidden" name="merchantId" th:value="${merchantId}" />
                                     <button type="submit"
-                                        style="padding: 0.5rem 1rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 6px; font-size: 0.9rem;">Çatdır</button>
+                                        style="padding: 0.5rem 1rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 6px; font-size: 0.9rem;"
+                                        th:text="#{orders.action.deliver}">Çatdır</button>
                                 </form>
                             </div>
                             <span
@@ -87,17 +105,20 @@
     <div id="rejectModal"
         style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
         <div class="card" style="max-width: 500px; margin: 2rem;">
-            <h2 style="margin-bottom: 1.5rem;">Sifarişi Rədd Et</h2>
+            <h2 style="margin-bottom: 1.5rem;" th:text="#{orders.reject.modal.title}">Sifarişi Rədd Et</h2>
             <form id="rejectForm" method="post">
                 <input type="hidden" name="merchantId" th:value="${merchantId}" />
                 <div class="form-group">
-                    <label>Rədd Səbəbi</label>
-                    <textarea name="reason" placeholder="Səbəbi qeyd edin..." rows="4" required></textarea>
+                    <label th:text="#{orders.reject.modal.reason}">Rədd Səbəbi</label>
+                    <textarea name="reason" th:placeholder="#{orders.reject.modal.placeholder}" rows="4"
+                        required></textarea>
                 </div>
                 <div style="display: flex; gap: 1rem;">
-                    <button type="button" onclick="closeRejectModal()" style="flex: 1; background: var(--card-bg);">Ləğv
+                    <button type="button" onclick="closeRejectModal()" style="flex: 1; background: var(--card-bg);"
+                        th:text="#{orders.reject.modal.cancel}">Ləğv
                         Et</button>
-                    <button type="submit" style="flex: 1; background: var(--danger-color);">Rədd Et</button>
+                    <button type="submit" style="flex: 1; background: var(--danger-color);"
+                        th:text="#{orders.reject.modal.confirm}">Rədd Et</button>
                 </div>
             </form>
         </div>

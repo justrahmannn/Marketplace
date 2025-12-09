@@ -10,30 +10,42 @@
     <nav class="navbar">
         <div class="nav-brand">Marketplace</div>
         <div class="nav-links">
-            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link">Məhsullar</a>
-            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link">Səbət</a>
-            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link"
-                style="color: var(--text-primary)">İstək Siyahısı</a>
-            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link">Hesab</a>
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.products}">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link" th:text="#{customer.nav.cart}">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link" style="color: var(--text-primary)"
+                th:text="#{customer.nav.wishlist}">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.account}">Hesab</a>
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem;">
+                <a th:href="@{/customer/wishlist(userId=${userId}, lang='az')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'az' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">AZ</a>
+                <span style="color: rgba(255,255,255,0.5);">|</span>
+                <a th:href="@{/customer/wishlist(userId=${userId}, lang='en')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
+            </div>
         </div>
     </nav>
 
     <div class="container animate-fade-in">
-        <h1 style="margin-bottom: 2rem;">İstək Siyahım</h1>
+        <h1 style="margin-bottom: 2rem;" th:text="#{customer.wishlist.title}">İstək Siyahım</h1>
 
         <div th:if="${wishlist.empty}" class="card" style="text-align: center; padding: 4rem;">
             <div style="font-size: 3rem; margin-bottom: 1rem;">♥</div>
-            <h2 style="margin-bottom: 1rem;">İstək siyahınız boşdur</h2>
-            <a th:href="@{/customer/products(userId=${userId})}" style="color: var(--accent-color);">Məhsullara Bax</a>
+            <h2 style="margin-bottom: 1rem;" th:text="#{customer.wishlist.empty.title}">İstək siyahınız boşdur</h2>
+            <a th:href="@{/customer/products(userId=${userId})}" style="color: var(--accent-color);"
+                th:text="#{customer.wishlist.view_products}">Məhsullara Bax</a>
         </div>
 
         <div th:unless="${wishlist.empty}" class="card">
             <table>
                 <thead>
                     <tr>
-                        <th>Məhsul</th>
-                        <th>Qiymət</th>
-                        <th>Əməliyyatlar</th>
+                        <th th:text="#{customer.wishlist.table.product}">Məhsul</th>
+                        <th th:text="#{customer.wishlist.table.price}">Qiymət</th>
+                        <th th:text="#{customer.wishlist.table.actions}">Əməliyyatlar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,14 +63,16 @@
                                     <input type="hidden" name="userId" th:value="${userId}" />
                                     <input type="hidden" name="productId" th:value="${item.product.id}" />
                                     <input type="hidden" name="count" value="1" />
-                                    <button type="submit" style="padding: 0.5rem 1rem; font-size: 0.9rem;">Səbətə
+                                    <button type="submit" style="padding: 0.5rem 1rem; font-size: 0.9rem;"
+                                        th:text="#{customer.wishlist.add_to_cart}">Səbətə
                                         At</button>
                                 </form>
                                 <form action="/customer/wishlist/remove" method="post" style="margin: 0;">
                                     <input type="hidden" name="userId" th:value="${userId}" />
                                     <input type="hidden" name="wishlistId" th:value="${item.id}" />
                                     <button type="submit"
-                                        style="background: none; color: var(--danger-color); padding: 0; width: auto;">Sil</button>
+                                        style="background: none; color: var(--danger-color); padding: 0; width: auto;"
+                                        th:text="#{customer.wishlist.remove}">Sil</button>
                                 </form>
                             </div>
                         </td>

@@ -18,7 +18,7 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping("/products")
-    public String listProducts(@RequestParam Long userId,
+    public String listProducts(@RequestParam long userId,
             @RequestParam(required = false) String search,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false) Long brandId,
@@ -45,14 +45,14 @@ public class CustomerController {
     }
 
     @GetMapping("/products/{productId}")
-    public String viewProduct(@PathVariable Long productId, @RequestParam Long userId, Model model) {
+    public String viewProduct(@PathVariable long productId, @RequestParam long userId, Model model) {
         model.addAttribute("product", customerService.getProduct(productId));
         model.addAttribute("userId", userId);
         return "product_detail";
     }
 
     @GetMapping("/account")
-    public String viewAccount(@RequestParam Long userId, Model model) {
+    public String viewAccount(@RequestParam long userId, Model model) {
         model.addAttribute("customer", customerService.getCustomer(userId));
         model.addAttribute("orders", customerService.getCustomerOrders(userId));
         model.addAttribute("userId", userId);
@@ -60,13 +60,13 @@ public class CustomerController {
     }
 
     @PostMapping("/cart/add")
-    public String addToCart(@RequestParam Long userId, @RequestParam Long productId, @RequestParam Integer count) {
+    public String addToCart(@RequestParam long userId, @RequestParam long productId, @RequestParam Integer count) {
         customerService.addToCart(userId, productId, count);
         return "redirect:/customer/cart?userId=" + userId;
     }
 
     @GetMapping("/cart")
-    public String viewCart(@RequestParam Long userId, Model model) {
+    public String viewCart(@RequestParam long userId, Model model) {
         model.addAttribute("cart", customerService.getCart(userId));
         model.addAttribute("totalAmount", customerService.getCartTotal(userId));
         model.addAttribute("userId", userId);
@@ -74,13 +74,13 @@ public class CustomerController {
     }
 
     @PostMapping("/cart/remove")
-    public String removeFromCart(@RequestParam Long userId, @RequestParam Long cartItemId) {
+    public String removeFromCart(@RequestParam long userId, @RequestParam long cartItemId) {
         customerService.removeFromCart(cartItemId);
         return "redirect:/customer/cart?userId=" + userId;
     }
 
     @PostMapping("/order")
-    public String makeOrder(@RequestParam Long userId, Model model) {
+    public String makeOrder(@RequestParam long userId, Model model) {
         try {
             customerService.makeOrder(userId);
             return "redirect:/customer/order-success?userId=" + userId;
@@ -94,7 +94,7 @@ public class CustomerController {
     }
 
     @GetMapping("/order-success")
-    public String orderSuccess(@RequestParam Long userId, Model model) {
+    public String orderSuccess(@RequestParam long userId, Model model) {
         model.addAttribute("userId", userId);
         model.addAttribute("customer", customerService.getCustomer(userId));
         model.addAttribute("orders", customerService.getCustomerOrders(userId));
@@ -102,7 +102,7 @@ public class CustomerController {
     }
 
     @PostMapping("/account/increase-balance")
-    public String increaseBalance(@RequestParam Long userId, @RequestParam BigDecimal amount, Model model) {
+    public String increaseBalance(@RequestParam long userId, @RequestParam BigDecimal amount, Model model) {
         try {
             customerService.increaseBalance(userId, amount);
             return "redirect:/customer/account?userId=" + userId;
@@ -116,7 +116,7 @@ public class CustomerController {
     }
 
     @PostMapping("/account/add-card")
-    public String addCard(@RequestParam Long userId,
+    public String addCard(@RequestParam long userId,
             @RequestParam String cardNumber,
             @RequestParam String cardExpiryDate,
             @RequestParam String cardCvv) {
@@ -125,26 +125,26 @@ public class CustomerController {
     }
 
     @PostMapping("/order/cancel/{orderId}")
-    public String cancelOrder(@PathVariable Long orderId, @RequestParam Long userId) {
+    public String cancelOrder(@PathVariable long orderId, @RequestParam long userId) {
         customerService.cancelOrder(orderId);
         return "redirect:/customer/account?userId=" + userId;
     }
 
     @GetMapping("/wishlist")
-    public String viewWishlist(@RequestParam Long userId, Model model) {
+    public String viewWishlist(@RequestParam long userId, Model model) {
         model.addAttribute("wishlist", customerService.getWishlist(userId));
         model.addAttribute("userId", userId);
         return "wishlist";
     }
 
     @PostMapping("/wishlist/add")
-    public String addToWishlist(@RequestParam Long userId, @RequestParam Long productId) {
+    public String addToWishlist(@RequestParam long userId, @RequestParam long productId) {
         customerService.addToWishlist(userId, productId);
         return "redirect:/customer/wishlist?userId=" + userId;
     }
 
     @PostMapping("/wishlist/remove")
-    public String removeFromWishlist(@RequestParam Long userId, @RequestParam Long wishlistId) {
+    public String removeFromWishlist(@RequestParam long userId, @RequestParam long wishlistId) {
         customerService.removeFromWishlist(wishlistId);
         return "redirect:/customer/wishlist?userId=" + userId;
     }

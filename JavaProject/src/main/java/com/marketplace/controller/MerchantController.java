@@ -17,43 +17,43 @@ public class MerchantController {
     private final MerchantService merchantService;
 
     @PostMapping("/{merchantId}/products")
-    public ResponseEntity<Product> createProduct(@PathVariable Long merchantId, @RequestBody Product product) {
+    public ResponseEntity<Product> createProduct(@PathVariable long merchantId, @RequestBody Product product) {
         return ResponseEntity.ok(merchantService.createProduct(merchantId, product));
     }
 
     @PutMapping("/products/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long productId, @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(@PathVariable long productId, @RequestBody Product product) {
         return ResponseEntity.ok(merchantService.updateProduct(productId, product));
     }
 
     @DeleteMapping("/products/{productId}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long productId) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable long productId) {
         merchantService.deleteProduct(productId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{merchantId}/products")
-    public ResponseEntity<List<Product>> getProducts(@PathVariable Long merchantId) {
+    public ResponseEntity<List<Product>> getProducts(@PathVariable long merchantId) {
         return ResponseEntity.ok(merchantService.getMerchantProducts(merchantId));
     }
 
     @GetMapping("/{merchantId}/orders")
-    public ResponseEntity<List<Order>> getOrders(@PathVariable Long merchantId) {
+    public ResponseEntity<List<Order>> getOrders(@PathVariable long merchantId) {
         return ResponseEntity.ok(merchantService.getMerchantOrders(merchantId));
     }
 
     @PostMapping("/orders/{orderId}/accept")
-    public ResponseEntity<Order> acceptOrder(@PathVariable Long orderId) {
+    public ResponseEntity<Order> acceptOrder(@PathVariable long orderId) {
         return ResponseEntity.ok(merchantService.acceptOrder(orderId));
     }
 
     @PostMapping("/orders/{orderId}/deliver")
-    public ResponseEntity<Order> deliverOrder(@PathVariable Long orderId) {
+    public ResponseEntity<Order> deliverOrder(@PathVariable long orderId) {
         return ResponseEntity.ok(merchantService.deliverOrder(orderId));
     }
 
     @PostMapping("/orders/{orderId}/reject")
-    public ResponseEntity<Order> rejectOrder(@PathVariable Long orderId, @RequestBody(required = false) String reason) {
+    public ResponseEntity<Order> rejectOrder(@PathVariable long orderId, @RequestBody(required = false) String reason) {
         return ResponseEntity.ok(merchantService.rejectOrder(orderId, reason != null ? reason : "Səbəb göstərilməyib"));
     }
 }

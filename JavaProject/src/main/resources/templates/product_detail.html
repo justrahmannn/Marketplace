@@ -10,10 +10,22 @@
     <nav class="navbar">
         <div class="nav-brand">Marketplace</div>
         <div class="nav-links">
-            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link">Məhsullar</a>
-            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link">Səbət</a>
-            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link">İstək Siyahısı</a>
-            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link">Hesab</a>
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.products}">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link" th:text="#{customer.nav.cart}">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.wishlist}">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.account}">Hesab</a>
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem;">
+                <a th:href="@{/customer/products/{id}(id=${product.id}, userId=${userId}, lang='az')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'az' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">AZ</a>
+                <span style="color: rgba(255,255,255,0.5);">|</span>
+                <a th:href="@{/customer/products/{id}(id=${product.id}, userId=${userId}, lang='en')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
+            </div>
         </div>
     </nav>
 
@@ -23,12 +35,14 @@
 
         <div class="card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
             <div
-                style="background: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600') center/cover; border-radius: 12px; height: 400px;">
+                style="background: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800') center/cover; border-radius: 12px; height: 400px;">
             </div>
 
             <div>
-                <div style="font-size: 0.9rem; color: var(--accent-color); margin-bottom: 0.5rem;"
-                    th:text="${product.brand.name}">Brend</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <div style="font-size: 0.9rem; color: var(--accent-color);"
+                        th:text="${product.brand != null ? product.brand.name : '-'}">Brend</div>
+                </div>
                 <h1 th:text="${product.name}" style="font-size: 2.5rem; margin-bottom: 1rem;">Məhsul Adı</h1>
                 <div th:text="${product.price} + ' ₼'"
                     style="font-size: 2rem; color: var(--accent-color); font-weight: 700; margin-bottom: 2rem;">0.00 ₼
