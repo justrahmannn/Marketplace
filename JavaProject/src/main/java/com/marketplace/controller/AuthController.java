@@ -103,4 +103,12 @@ public class AuthController {
         authService.registerMerchant(merchant);
         return "redirect:/auth/merchant/login";
     }
+
+    // Simple logout — clears any client-side state by redirecting to the public homepage.
+    // Note: this project does not use Spring Security sessions; logout is performed
+    // by removing `userId` from the URL and redirecting to the index.
+    @GetMapping("/logout")
+    public String logout() {
+        return "redirect:/";
+    }
 }

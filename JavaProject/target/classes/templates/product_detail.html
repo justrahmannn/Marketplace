@@ -25,7 +25,8 @@
                 <a th:href="@{/customer/products/{id}(id=${product.id}, userId=${userId}, lang='en')}"
                     style="color: white; font-weight: bold; text-decoration: none;"
                     th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
-            </div>
+                </div>
+                <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
         </div>
     </nav>
 
