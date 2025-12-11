@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Run Marketplace App",
+            "request": "launch",
+            "mainClass": "com.marketplace.MarketplaceApplication",
+            "projectName": "marketplace"
+        }
+    ]
+}
