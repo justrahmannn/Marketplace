@@ -154,11 +154,12 @@ class MerchantServiceTest {
         when(productRepository.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             merchantService.updateProduct(999L, new Product());
         });
 
-        assertEquals("Product not found", exception.getMessage());
+        assertTrue(exception.getMessage().contains("Product"));
+        assertTrue(exception.getMessage().contains("999"));
     }
 
     @Test
@@ -263,11 +264,12 @@ class MerchantServiceTest {
         when(productRepository.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             merchantService.getProduct(999L);
         });
 
-        assertEquals("Product not found", exception.getMessage());
+        assertTrue(exception.getMessage().contains("Product"));
+        assertTrue(exception.getMessage().contains("999"));
     }
 
     @Test
