@@ -58,7 +58,7 @@ public class MerchantWebController {
     public String addProduct(@RequestParam long merchantId,
             @ModelAttribute Product product,
             @RequestParam(required = false) String newBrandName,
-            @RequestParam(required = false) MultipartFile[] productImages) {
+            @RequestParam(value = "productImages", required = false) MultipartFile[] productImages) {
         if (newBrandName != null && !newBrandName.trim().isEmpty()) {
             product.setBrand(merchantService.createBrand(newBrandName));
         }
@@ -90,7 +90,7 @@ public class MerchantWebController {
             @RequestParam long merchantId,
             @ModelAttribute Product product,
             @RequestParam(required = false) String newBrandName,
-            @RequestParam(required = false) MultipartFile[] productImages) {
+            @RequestParam(value = "productImages", required = false) MultipartFile[] productImages) {
         if (newBrandName != null && !newBrandName.trim().isEmpty()) {
             product.setBrand(merchantService.createBrand(newBrandName));
         }
