@@ -4,6 +4,8 @@
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+🌐 Live Demo: [https://dadly.onrender.com](https://my-marketplace-site.onrender.com/)
+
 A modern, full-featured e-commerce marketplace platform built with Spring Boot that connects merchants and customers. Features a stunning Google-inspired UI design with bilingual support (English/Azerbaijani).
 
 ## ✨ Features
