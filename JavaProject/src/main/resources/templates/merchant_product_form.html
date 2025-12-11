@@ -116,6 +116,15 @@
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label>Məhsul Şəkilləri</label>
+                    <input type="file" name="images" multiple accept="image/*" 
+                        style="padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);" />
+                    <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">
+                        Bir və ya bir neçə şəkil seçə bilərsiniz (JPG, PNG)
+                    </small>
+                </div>
+
                 <button type="submit" style="width: 100%; margin-top: 1rem;"
                     th:text="${product.id != null ? #messages.msg('product.form.update') : #messages.msg('product.form.add')}">Əlavə
                     Et</button>

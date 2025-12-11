@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -54,11 +55,12 @@ public class MerchantWebController {
     @PostMapping("/products/add")
     public String addProduct(@RequestParam long merchantId,
             @ModelAttribute Product product,
-            @RequestParam(required = false) String newBrandName) {
+            @RequestParam(required = false) String newBrandName,
+            @RequestParam(value = "images", required = false) MultipartFile[] images) {
         if (newBrandName != null && !newBrandName.trim().isEmpty()) {
             product.setBrand(merchantService.createBrand(newBrandName));
         }
-        merchantService.addProduct(merchantId, product);
+        merchantService.addProduct(merchantId, product, images);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 

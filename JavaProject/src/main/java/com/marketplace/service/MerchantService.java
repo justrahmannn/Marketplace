@@ -4,12 +4,15 @@ import com.marketplace.entity.Customer;
 import com.marketplace.entity.Merchant;
 import com.marketplace.entity.Order;
 import com.marketplace.entity.Product;
+import com.marketplace.entity.ProductPhoto;
 import com.marketplace.entity.Brand;
 import com.marketplace.repository.BrandRepository;
 import com.marketplace.repository.CustomerRepository;
 import com.marketplace.repository.MerchantRepository;
 import com.marketplace.repository.OrderRepository;
 import com.marketplace.repository.ProductRepository;
+import com.marketplace.repository.ProductPhotoRepository;
+import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,12 +27,28 @@ public class MerchantService {
     private final MerchantRepository merchantRepository;
     private final CustomerRepository customerRepository;
     private final BrandRepository brandRepository;
+    private final FileStorageService fileStorageService;
+    private final ProductPhotoRepository productPhotoRepository;
 
-    public Product createProduct(@org.springframework.lang.NonNull Long merchantId, Product product) {
+    public Product createProduct(@org.springframework.lang.NonNull Long merchantId, Product product,
+            MultipartFile[] images) {
         Merchant merchant = merchantRepository.findById(merchantId)
                 .orElseThrow(() -> new RuntimeException("Merchant not found"));
         product.setMerchant(merchant);
         Product savedProduct = productRepository.save(product);
+
+        // Save product images
+        if (images != null && images.length > 0) {
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String imageUrl = fileStorageService.saveFile(image, "products");
+                    ProductPhoto photo = new ProductPhoto();
+                    photo.setProduct(savedProduct);
+                    photo.setUrl(imageUrl);
+                    productPhotoRepository.save(photo);
+                }
+            }
+        }
 
         return savedProduct;
     }
@@ -95,8 +114,9 @@ public class MerchantService {
     }
 
     // Helper methods for web controller
-    public Product addProduct(@org.springframework.lang.NonNull Long merchantId, Product product) {
-        return createProduct(merchantId, product);
+    public Product addProduct(@org.springframework.lang.NonNull Long merchantId, Product product,
+            MultipartFile[] images) {
+        return createProduct(merchantId, product, images);
     }
 
     public List<Product> getProducts(@org.springframework.lang.NonNull Long merchantId) {

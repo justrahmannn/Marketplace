@@ -101,7 +101,7 @@ class MerchantServiceTest {
         when(productRepository.save(any(Product.class))).thenReturn(newProduct);
 
         // Act
-        Product result = merchantService.createProduct(1L, newProduct);
+        Product result = merchantService.createProduct(1L, newProduct, null);
 
         // Assert
         assertNotNull(result);
@@ -116,7 +116,7 @@ class MerchantServiceTest {
 
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            merchantService.createProduct(999L, new Product());
+            merchantService.createProduct(999L, new Product(), null);
         });
 
         assertEquals("Merchant not found", exception.getMessage());
