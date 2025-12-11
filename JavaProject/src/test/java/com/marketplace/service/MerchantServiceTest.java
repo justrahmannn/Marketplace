@@ -1,6 +1,7 @@
 package com.marketplace.service;
 
 import com.marketplace.entity.*;
+import com.marketplace.exception.ResourceNotFoundException;
 import com.marketplace.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -115,11 +116,12 @@ class MerchantServiceTest {
         when(merchantRepository.findById(999L)).thenReturn(Optional.empty());
 
         // Act & Assert
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+        ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class, () -> {
             merchantService.createProduct(999L, new Product(), null);
         });
 
-        assertEquals("Merchant not found", exception.getMessage());
+        assertTrue(exception.getMessage().contains("Merchant"));
+        assertTrue(exception.getMessage().contains("999"));
     }
 
     @Test
