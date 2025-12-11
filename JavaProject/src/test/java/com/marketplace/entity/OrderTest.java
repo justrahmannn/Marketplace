@@ -27,7 +27,7 @@ class OrderTest {
     void testSetAndGetId() {
         // Arrange
         Order order = new Order();
-        Long id = 1L;
+        long id = 1L;
 
         // Act
         order.setId(id);
