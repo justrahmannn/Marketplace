@@ -1,0 +1,7 @@
+target/
+.vscode/
+.idea/
+*.zip
+__MACOSX/
+.DS_Store
+data/

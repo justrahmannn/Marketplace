@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Səbət | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace</div>
+        <div class="nav-links">
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.products}">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link" style="color: var(--text-primary)"
+                th:text="#{customer.nav.cart}">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.wishlist}">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.account}">Hesab</a>
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem;">
+                <a th:href="@{/customer/cart(userId=${userId}, lang='az')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'az' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">AZ</a>
+                <span style="color: rgba(255,255,255,0.5);">|</span>
+                <a th:href="@{/customer/cart(userId=${userId}, lang='en')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
+            </div>
+            <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;" th:text="#{customer.cart.title}">Alış-Veriş Səbəti</h1>
+
+        <div th:if="${error}"
+            style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;"
+            th:text="${error}"></div>
+
+        <div th:if="${cart.items.empty}" class="card" style="text-align: center; padding: 4rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🛒</div>
+            <h2 style="margin-bottom: 1rem;" th:text="#{customer.cart.empty.title}">Səbətiniz boşdur</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;" th:text="#{customer.cart.empty.message}">Hələ
+                heç nə əlavə etməmisiniz.</p>
+            <a th:href="@{/customer/products(userId=${userId})}" class="btn-secondary"
+                style="padding: 0.75rem 1.5rem; border-radius: 8px; background: var(--accent-color); color: white;"
+                th:text="#{customer.cart.start_shopping}">Alış-Verişə
+                Başla</a>
+        </div>
+
+        <div th:unless="${cart.items.empty}" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th th:text="#{customer.cart.table.product}">Məhsul</th>
+                            <th th:text="#{customer.cart.table.price}">Qiymət</th>
+                            <th th:text="#{customer.cart.table.quantity}">Miqdar</th>
+                            <th th:text="#{customer.cart.table.total}">Cəmi</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${cart.items}">
+                            <td style="display: flex; align-items: center; gap: 1rem;">
+                                <div
+                                    style="width: 40px; height: 40px; background: rgba(255,255,255,0.1); border-radius: 4px;">
+                                </div>
+                                <span th:text="${item.product.name}">Məhsul</span>
+                            </td>
+                            <td th:text="${item.product.price} + ' ₼'">0.00 ₼</td>
+                            <td th:text="${item.count}">1</td>
+                            <td th:text="${item.product.price * item.count} + ' ₼'">0.00 ₼</td>
+                            <td>
+                                <form action="/customer/cart/remove" method="post">
+                                    <input type="hidden" name="userId" th:value="${userId}" />
+                                    <input type="hidden" name="cartItemId" th:value="${item.id}" />
+                                    <button type="submit"
+                                        style="background: none; color: var(--danger-color); padding: 0; width: auto;">✕</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card" style="height: fit-content;">
+                <h2 style="margin-bottom: 1.5rem;" th:text="#{customer.cart.summary.title}">Xülasə</h2>
+                <div
+                    style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: var(--text-secondary);">
+                    <span th:text="#{customer.cart.summary.subtotal}">Ara Cəm</span>
+                    <span th:text="${totalAmount} + ' ₼'">0.00 ₼</span>
+                </div>
+                <div style="border-top: var(--glass-border); margin: 1rem 0;"></div>
+                <form action="/customer/order" method="post">
+                    <input type="hidden" name="userId" th:value="${userId}" />
+                    <button type="submit" th:text="#{customer.cart.checkout}">Ödənişə Keç</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

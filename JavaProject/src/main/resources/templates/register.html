@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Qeydiyyat | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <div class="card auth-card animate-fade-in">
+            <h1 class="auth-title">Hesab Yaradın</h1>
+
+            <form id="registerForm" method="post">
+                <div class="form-group">
+                    <label>Hesab Növü</label>
+                    <select id="userType" onchange="toggleFields()" required style="margin-bottom: 1rem;">
+                        <option value="">Seçin...</option>
+                        <option value="customer">Alıcı</option>
+                        <option value="merchant">Satıcı</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Ad</label>
+                    <input type="text" name="name" placeholder="Adınız" required />
+                </div>
+
+                <div class="form-group">
+                    <label>Soyad</label>
+                    <input type="text" name="surname" placeholder="Soyadınız" required />
+                </div>
+
+                <div class="form-group" id="companyField" style="display: none;">
+                    <label>Şirkət Adı</label>
+                    <input type="text" name="companyName" placeholder="Şirkət adınız" />
+                </div>
+
+                <div class="form-group">
+                    <label>Şifrə</label>
+                    <input type="password" name="password" placeholder="Güclü şifrə seçin" required />
+                </div>
+
+                <button type="submit">Hesab Yarat</button>
+            </form>
+
+            <div style="margin-top: 1.5rem; text-align: center; color: var(--text-secondary);">
+                Artıq hesabınız var? <a href="/auth/login">Daxil olun</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleFields() {
+            const userType = document.getElementById('userType').value;
+            const companyField = document.getElementById('companyField');
+            const form = document.getElementById('registerForm');
+
+            if (userType === 'merchant') {
+                companyField.style.display = 'block';
+                companyField.querySelector('input').required = true;
+                form.action = '/auth/register/merchant';
+            } else if (userType === 'customer') {
+                companyField.style.display = 'none';
+                companyField.querySelector('input').required = false;
+                form.action = '/auth/register/customer';
+            }
+        }
+    </script>
+</body>
+
+</html>

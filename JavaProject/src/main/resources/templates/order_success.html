@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Sifariş Təsdiqləndi | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace</div>
+        <div class="nav-links">
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link">Hesab</a>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <div class="card" style="text-align: center; padding: 4rem; max-width: 600px; margin: 4rem auto;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+            <h1 style="margin-bottom: 1rem; color: var(--success-color);">Sifariş Uğurla Tamamlandı!</h1>
+            <p style="color: var(--text-secondary); margin-bottom: 2rem;">Sifarişiniz qəbul edildi və tezliklə
+                çatdırılacaq.</p>
+
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;">Yeni Balans</div>
+                <div style="font-size: 2rem; font-weight: 700; color: var(--success-color);">
+                    <span th:text="${customer.balance}">0.00</span> ₼
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; justify-content: center;">
+                <a th:href="@{/customer/products(userId=${userId})}"
+                    style="padding: 0.75rem 1.5rem; background: var(--accent-color); color: white; border-radius: 8px;">Alış-Verişə
+                    Davam Et</a>
+                <a th:href="@{/customer/account(userId=${userId})}" class="btn-secondary"
+                    style="padding: 0.75rem 1.5rem; border-radius: 8px;">Hesabıma Get</a>
+                    <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

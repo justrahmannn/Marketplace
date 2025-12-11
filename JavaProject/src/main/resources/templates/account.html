@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Hesab | Marketplace</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Marketplace</div>
+        <div class="nav-links">
+            <a th:href="@{/customer/products(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.products}">Məhsullar</a>
+            <a th:href="@{/customer/cart(userId=${userId})}" class="nav-link" th:text="#{customer.nav.cart}">Səbət</a>
+            <a th:href="@{/customer/wishlist(userId=${userId})}" class="nav-link"
+                th:text="#{customer.nav.wishlist}">İstək Siyahısı</a>
+            <a th:href="@{/customer/account(userId=${userId})}" class="nav-link" style="color: var(--text-primary)"
+                th:text="#{customer.nav.account}">Hesab</a>
+            <div style="display: flex; gap: 0.5rem; margin-left: 1rem;">
+                <a th:href="@{/customer/account(userId=${userId}, lang='az')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'az' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">AZ</a>
+                <span style="color: rgba(255,255,255,0.5);">|</span>
+                <a th:href="@{/customer/account(userId=${userId}, lang='en')}"
+                    style="color: white; font-weight: bold; text-decoration: none;"
+                    th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
+            </div>
+            <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container animate-fade-in">
+        <h1 style="margin-bottom: 2rem;" th:text="#{customer.account.title}">Hesabım</h1>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="card">
+                <h2 style="margin-bottom: 1.5rem;" th:text="#{customer.account.personal_info}">Şəxsi Məlumatlar</h2>
+
+                <div class="form-group">
+                    <label th:text="#{customer.account.name}">Ad</label>
+                    <input type="text" th:value="${customer.name}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{customer.account.surname}">Soyad</label>
+                    <input type="text" th:value="${customer.surname}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{customer.account.email}">Email</label>
+                    <input type="email" th:value="${customer.email}" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label th:text="#{customer.account.card_number}">Kart Nömrəsi</label>
+                    <input type="text" th:value="${customer.cardNumber}" readonly />
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 style="margin-bottom: 1.5rem;" th:text="#{customer.account.balance}">Balans</h2>
+
+                <div th:if="${error}"
+                    style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 1rem; border-radius: 8px; margin-bottom: 1.5rem; text-align: center;"
+                    th:text="${error}"></div>
+
+                <div style="text-align: center; padding: 3rem 0;">
+                    <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;"
+                        th:text="#{customer.account.balance.current}">Mövcud Balans
+                    </div>
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--accent-color);">
+                        <span th:text="${customer.balance}">0.00</span> ₼
+                    </div>
+                </div>
+
+                <div style="border-top: var(--glass-border); padding-top: 1.5rem; margin-top: 1.5rem;">
+
+                    <!-- If card exists, show Top Up -->
+                    <div th:if="${customer.cardNumber != null && !customer.cardNumber.isEmpty()}">
+                        <h3 style="margin-bottom: 1rem;" th:text="#{customer.account.balance.add}">Balans Artır</h3>
+                        <div
+                            style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px; border: var(--glass-border);">
+                            <div style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.5rem;"
+                                th:text="#{customer.account.card.selected}">
+                                Seçilmiş Kart</div>
+                            <div style="display: flex; align-items: center; justify-content: space-between;">
+                                <div style="font-family: monospace; font-size: 1.1rem;">
+                                    **** **** **** <span
+                                        th:text="${#strings.substring(customer.cardNumber, 12)}">0000</span>
+                                </div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                    <span th:text="${customer.cardExpiryDate}">MM/YY</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form action="/customer/account/increase-balance" method="post"
+                            style="display: flex; gap: 1rem;">
+                            <input type="hidden" name="userId" th:value="${userId}" />
+                            <input type="number" name="amount"
+                                th:placeholder="#{customer.account.balance.amount_placeholder}" min="1" step="0.01"
+                                required style="flex: 1;" />
+                            <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;"
+                                th:text="#{customer.account.balance.button}">Artır</button>
+                        </form>
+                    </div>
+
+                    <!-- If no card, show Add Card -->
+                    <div th:unless="${customer.cardNumber != null && !customer.cardNumber.isEmpty()}">
+                        <h3 style="margin-bottom: 1rem;" th:text="#{customer.account.card.add.title}">Bank Kartı Əlavə
+                            Et</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1rem; font-size: 0.9rem;"
+                            th:text="#{customer.account.card.add.message}">Balans artırmaq
+                            üçün kart məlumatlarını daxil edin.</p>
+                        <form action="/customer/account/add-card" method="post"
+                            style="display: flex; flex-direction: column; gap: 1rem;">
+                            <input type="hidden" name="userId" th:value="${userId}" />
+
+                            <div class="form-group">
+                                <label th:text="#{customer.account.card_number}">Kart Nömrəsi</label>
+                                <input type="text" name="cardNumber" placeholder="0000 0000 0000 0000" required
+                                    pattern="\d{16}" title="16 rəqəmli kart nömrəsi" maxlength="16" />
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label th:text="#{customer.account.card.expiry}">Bitmə Tarixi</label>
+                                    <input type="text" name="cardExpiryDate" placeholder="MM/YY" required
+                                        pattern="(0[1-9]|1[0-2])\/[0-9]{2}" title="Format: MM/YY" maxlength="5" />
+                                </div>
+                                <div class="form-group">
+                                    <label th:text="#{customer.account.card.cvv}">CVV</label>
+                                    <input type="text" name="cardCvv" placeholder="123" required pattern="\d{3}"
+                                        title="3 rəqəmli CVV kodu" maxlength="3" />
+                                </div>
+                            </div>
+
+                            <button type="submit" style="width: 100%; margin-top: 0.5rem;"
+                                th:text="#{customer.account.card.save}">Kartı Yadda Saxla</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 2rem;">
+            <h2 style="margin-bottom: 1.5rem;" th:text="#{customer.account.orders.title}">Sifarişlərim</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th th:text="#{customer.account.orders.product}">Məhsul</th>
+                        <th th:text="#{customer.account.orders.quantity}">Miqdar</th>
+                        <th th:text="#{customer.account.orders.amount}">Məbləğ</th>
+                        <th th:text="#{customer.account.orders.status}">Status</th>
+                        <th th:text="#{customer.account.orders.action}">Əməliyyat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="order : ${orders}">
+                        <td th:text="${order.product.name}">Məhsul</td>
+                        <td th:text="${order.count}">1</td>
+                        <td th:text="${order.totalAmount} + ' ₼'">0 ₼</td>
+                        <td>
+                            <span th:if="${order.status.name() == 'CREATED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(234, 179, 8, 0.2); color: #fbbf24; border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.created}">Gözləyir</span>
+                            <span th:if="${order.status.name() == 'ACCEPTED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.accepted}">Qəbul
+                                Edildi</span>
+                            <span th:if="${order.status.name() == 'DELIVERED'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.delivered}">Çatdırıldı</span>
+                            <span th:if="${order.status.name() == 'REJECT_BY_MERCHANT'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.rejected}">Rədd
+                                Edildi</span>
+                            <span th:if="${order.status.name() == 'REJECT_BY_CUSTOMER'}"
+                                style="padding: 0.25rem 0.75rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 4px; font-size: 0.85rem;"
+                                th:text="#{orders.status.rejected}">Ləğv
+                                Edildi</span>
+                        </td>
+                        <td>
+                            <form th:if="${order.status.name() == 'CREATED'}"
+                                th:action="@{/customer/order/cancel/{id}(id=${order.id})}" method="post"
+                                style="margin: 0;">
+                                <input type="hidden" name="userId" th:value="${userId}" />
+                                <button type="submit"
+                                    th:onclick="'return confirm(\'' + #{customer.account.orders.cancel.confirm} + '\')'"
+                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;"
+                                    th:text="#{customer.account.orders.cancel}">Ləğv
+                                    Et</button>
+                            </form>
+                            <span th:unless="${order.status.name() == 'CREATED'}"
+                                style="color: var(--text-secondary); font-size: 0.9rem;">-</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
