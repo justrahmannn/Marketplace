@@ -35,7 +35,10 @@
             style="display: inline-block; margin-bottom: 2rem; color: var(--text-secondary);">← Məhsullara Qayıt</a>
 
         <div class="card" style="display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start;">
-            <div
+            <div th:if="${product.photos != null and !product.photos.isEmpty()}"
+                th:style="'background: url(' + ${product.photos[0].url} + ') center/cover; border-radius: 12px; height: 400px;'">
+            </div>
+            <div th:if="${product.photos == null or product.photos.isEmpty()}"
                 style="background: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800') center/cover; border-radius: 12px; height: 400px;">
             </div>
 

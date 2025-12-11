@@ -63,16 +63,25 @@
 
 
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label th:text="#{product.form.price}">Qiymət (₼)</label>
-                        <input type="number" th:field="*{price}" step="0.01" min="0" placeholder="0.00" required />
+                <div style=\"display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;\">
+                    <div class=\"form-group\">
+                        <label th:text=\"#{product.form.price}\">Qiymət (₼)</label>
+                        <input type=\"number\" th:field=\"*{price}\" step=\"0.01\" min=\"0\" placeholder=\"0.00\" required />
                     </div>
 
-                    <div class="form-group">
-                        <label th:text="#{product.form.stock}">Stok Sayı</label>
-                        <input type="number" th:field="*{stockCount}" min="0" placeholder="0" required />
+                    <div class=\"form-group\">
+                        <label th:text=\"#{product.form.stock}\">Stok Sayı</label>
+                        <input type=\"number\" th:field=\"*{stockCount}\" min=\"0\" placeholder=\"0\" required />
                     </div>
+                </div>
+
+                <div class=\"form-group\">
+                    <label>Product Images</label>
+                    <input type=\"file\" name=\"productImages\" accept=\"image/*\" multiple 
+                           style=\"padding: 0.75rem; border: 2px dashed var(--border-color); border-radius: 8px; background: rgba(255,255,255,0.05);\" />
+                    <small style=\"color: var(--text-secondary); margin-top: 0.5rem; display: block;\">
+                        You can upload multiple images (max 5MB each)
+                    </small>
                 </div>
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">

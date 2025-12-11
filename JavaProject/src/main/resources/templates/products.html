@@ -91,7 +91,10 @@
             <!-- Products Grid -->
             <div class="product-grid">
                 <div th:each="product : ${products}" class="card product-card">
-                    <div class="product-image"
+                    <div class="product-image" th:if="${product.photos != null and !product.photos.isEmpty()}"
+                        th:style="'background-image: url(' + ${product.photos[0].url} + '); background-size: cover; background-position: center;'">
+                    </div>
+                    <div class="product-image" th:if="${product.photos == null or product.photos.isEmpty()}"
                         style="background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400'); background-size: cover; background-position: center;">
                     </div>
                     <h3 class="product-title" th:text="${product.name}">Məhsul Adı</h3>
