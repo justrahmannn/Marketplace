@@ -78,7 +78,7 @@ class OrderTest {
     void testSetAndGetCount() {
         // Arrange
         Order order = new Order();
-        Integer count = 5;
+        int count = 5;
 
         // Act
         order.setCount(count);
