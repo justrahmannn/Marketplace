@@ -4,10 +4,12 @@ import com.marketplace.entity.Order;
 import com.marketplace.entity.Product;
 import com.marketplace.service.MerchantService;
 import com.marketplace.service.CustomerService;
+import com.marketplace.service.FileStorageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ public class MerchantWebController {
 
     private final MerchantService merchantService;
     private final CustomerService customerService;
+    private final FileStorageService fileStorageService;
 
     @GetMapping("/dashboard")
     public String dashboard(@RequestParam long merchantId, Model model) {
@@ -54,11 +57,12 @@ public class MerchantWebController {
     @PostMapping("/products/add")
     public String addProduct(@RequestParam long merchantId,
             @ModelAttribute Product product,
-            @RequestParam(required = false) String newBrandName) {
+            @RequestParam(required = false) String newBrandName,
+            @RequestParam(required = false) MultipartFile[] productImages) {
         if (newBrandName != null && !newBrandName.trim().isEmpty()) {
             product.setBrand(merchantService.createBrand(newBrandName));
         }
-        merchantService.addProduct(merchantId, product);
+        merchantService.addProduct(merchantId, product, productImages, fileStorageService);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 
@@ -85,11 +89,12 @@ public class MerchantWebController {
     public String editProduct(@PathVariable long productId,
             @RequestParam long merchantId,
             @ModelAttribute Product product,
-            @RequestParam(required = false) String newBrandName) {
+            @RequestParam(required = false) String newBrandName,
+            @RequestParam(required = false) MultipartFile[] productImages) {
         if (newBrandName != null && !newBrandName.trim().isEmpty()) {
             product.setBrand(merchantService.createBrand(newBrandName));
         }
-        merchantService.updateProduct(productId, product);
+        merchantService.updateProduct(productId, product, productImages, fileStorageService);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 

@@ -4,6 +4,7 @@ import com.marketplace.entity.Customer;
 import com.marketplace.entity.Merchant;
 import com.marketplace.entity.Order;
 import com.marketplace.entity.Product;
+import com.marketplace.entity.ProductPhoto;
 import com.marketplace.entity.Brand;
 import com.marketplace.repository.BrandRepository;
 import com.marketplace.repository.CustomerRepository;
@@ -12,7 +13,9 @@ import com.marketplace.repository.OrderRepository;
 import com.marketplace.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -44,6 +47,40 @@ public class MerchantService {
         product.setStockCount(productDetails.getStockCount());
         product.setCategory(productDetails.getCategory());
         product.setBrand(productDetails.getBrand());
+
+        return productRepository.save(product);
+    }
+
+    public Product updateProduct(@org.springframework.lang.NonNull Long productId, Product productDetails,
+                                MultipartFile[] productImages, FileStorageService fileStorageService) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+
+        product.setName(productDetails.getName());
+        product.setDetails(productDetails.getDetails());
+        product.setPrice(productDetails.getPrice());
+        product.setStockCount(productDetails.getStockCount());
+        product.setCategory(productDetails.getCategory());
+        product.setBrand(productDetails.getBrand());
+
+        // Handle new image uploads
+        if (productImages != null && productImages.length > 0) {
+            List<ProductPhoto> existingPhotos = product.getPhotos();
+            if (existingPhotos == null) {
+                existingPhotos = new ArrayList<>();
+            }
+            
+            for (MultipartFile image : productImages) {
+                if (!image.isEmpty()) {
+                    String imageUrl = fileStorageService.saveFile(image, "products");
+                    ProductPhoto photo = new ProductPhoto();
+                    photo.setProduct(product);
+                    photo.setUrl(imageUrl);
+                    existingPhotos.add(photo);
+                }
+            }
+            product.setPhotos(existingPhotos);
+        }
 
         return productRepository.save(product);
     }
@@ -97,6 +134,32 @@ public class MerchantService {
     // Helper methods for web controller
     public Product addProduct(@org.springframework.lang.NonNull Long merchantId, Product product) {
         return createProduct(merchantId, product);
+    }
+
+    public Product addProduct(@org.springframework.lang.NonNull Long merchantId, Product product, 
+                            MultipartFile[] productImages, FileStorageService fileStorageService) {
+        Merchant merchant = merchantRepository.findById(merchantId)
+                .orElseThrow(() -> new RuntimeException("Merchant not found"));
+        product.setMerchant(merchant);
+        Product savedProduct = productRepository.save(product);
+
+        // Handle image uploads
+        if (productImages != null && productImages.length > 0) {
+            List<ProductPhoto> photos = new ArrayList<>();
+            for (MultipartFile image : productImages) {
+                if (!image.isEmpty()) {
+                    String imageUrl = fileStorageService.saveFile(image, "products");
+                    ProductPhoto photo = new ProductPhoto();
+                    photo.setProduct(savedProduct);
+                    photo.setUrl(imageUrl);
+                    photos.add(photo);
+                }
+            }
+            savedProduct.setPhotos(photos);
+            savedProduct = productRepository.save(savedProduct);
+        }
+
+        return savedProduct;
     }
 
     public List<Product> getProducts(@org.springframework.lang.NonNull Long merchantId) {
