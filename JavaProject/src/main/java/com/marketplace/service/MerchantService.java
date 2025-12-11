@@ -143,8 +143,12 @@ public class MerchantService {
     }
 
     public Brand createBrand(String name) {
-        Brand brand = new Brand();
-        brand.setName(name);
-        return brandRepository.save(brand);
+        // Check if brand already exists (case-insensitive)
+        return brandRepository.findByNameIgnoreCase(name)
+                .orElseGet(() -> {
+                    Brand brand = new Brand();
+                    brand.setName(name);
+                    return brandRepository.save(brand);
+                });
     }
 }
