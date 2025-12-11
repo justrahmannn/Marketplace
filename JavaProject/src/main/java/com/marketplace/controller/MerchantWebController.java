@@ -58,11 +58,11 @@ public class MerchantWebController {
     public String addProduct(@RequestParam long merchantId,
             @ModelAttribute Product product,
             @RequestParam(required = false) String newBrandName,
-            @RequestParam(value = "productImages", required = false) MultipartFile[] productImages) {
+            @RequestParam(value = "images", required = false) MultipartFile[] images) {
         if (newBrandName != null && !newBrandName.trim().isEmpty()) {
             product.setBrand(merchantService.createBrand(newBrandName));
         }
-        merchantService.addProduct(merchantId, product, productImages, fileStorageService);
+        merchantService.addProduct(merchantId, product, images);
         return "redirect:/merchant/products?merchantId=" + merchantId;
     }
 
