@@ -97,13 +97,13 @@
                         </div>
 
                         <form action="/customer/account/increase-balance" method="post"
-                            style="display: flex; gap: 1rem;">
+                            style="display: flex; gap: 1rem; align-items: stretch;">
                             <input type="hidden" name="userId" th:value="${userId}" />
                             <input type="number" name="amount"
                                 th:placeholder="#{customer.account.balance.amount_placeholder}" min="1" step="0.01"
                                 required style="flex: 1;" />
-                            <button type="submit" style="width: auto; padding: 0.75rem 1.5rem;"
-                                th:text="#{customer.account.balance.button}">Artır</button>
+                            <button type="submit" class="btn-success ripple" style="width: auto; padding: 0.75rem 1.5rem;"
+                                th:text="#{customer.account.balance.button}">💰 Artır</button>
                         </form>
                     </div>
 
@@ -137,8 +137,8 @@
                                 </div>
                             </div>
 
-                            <button type="submit" style="width: 100%; margin-top: 0.5rem;"
-                                th:text="#{customer.account.card.save}">Kartı Yadda Saxla</button>
+                            <button type="submit" class="btn-primary ripple" style="width: 100%; margin-top: 0.5rem;"
+                                th:text="#{customer.account.card.save}">💳 Kartı Yadda Saxla</button>
                         </form>
                     </div>
 
@@ -188,11 +188,9 @@
                                 th:action="@{/customer/order/cancel/{id}(id=${order.id})}" method="post"
                                 style="margin: 0;">
                                 <input type="hidden" name="userId" th:value="${userId}" />
-                                <button type="submit"
+                                <button type="submit" class="btn-danger btn-sm"
                                     th:onclick="'return confirm(\'' + #{customer.account.orders.cancel.confirm} + '\')'"
-                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;"
-                                    th:text="#{customer.account.orders.cancel}">Ləğv
-                                    Et</button>
+                                    th:text="#{customer.account.orders.cancel}">❌ Ləğv Et</button>
                             </form>
                             <span th:unless="${order.status.name() == 'CREATED'}"
                                 style="color: var(--text-secondary); font-size: 0.9rem;">-</span>

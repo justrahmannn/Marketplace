@@ -64,16 +64,15 @@
                                     <input type="hidden" name="userId" th:value="${userId}" />
                                     <input type="hidden" name="productId" th:value="${item.product.id}" />
                                     <input type="hidden" name="count" value="1" />
-                                    <button type="submit" style="padding: 0.5rem 1rem; font-size: 0.9rem;"
-                                        th:text="#{customer.wishlist.add_to_cart}">Səbətə
-                                        At</button>
+                                    <button type="submit" class="btn-success btn-sm ripple"
+                                        th:text="#{customer.wishlist.add_to_cart}">🛒 Səbətə At</button>
                                 </form>
                                 <form action="/customer/wishlist/remove" method="post" style="margin: 0;">
                                     <input type="hidden" name="userId" th:value="${userId}" />
                                     <input type="hidden" name="wishlistId" th:value="${item.id}" />
-                                    <button type="submit"
-                                        style="background: none; color: var(--danger-color); padding: 0; width: auto;"
-                                        th:text="#{customer.wishlist.remove}">Sil</button>
+                                    <button type="submit" class="btn-icon btn-sm"
+                                        style="background: transparent; color: var(--accent-red); width: auto; border: 1px solid var(--accent-red);"
+                                        th:text="#{customer.wishlist.remove}">🗑️</button>
                                 </form>
                             </div>
                         </td>

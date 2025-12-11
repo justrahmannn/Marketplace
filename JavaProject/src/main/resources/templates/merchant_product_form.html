@@ -125,9 +125,8 @@
                     </small>
                 </div>
 
-                <button type="submit" style="width: 100%; margin-top: 1rem;"
-                    th:text="${product.id != null ? #messages.msg('product.form.update') : #messages.msg('product.form.add')}">Əlavə
-                    Et</button>
+                <button type="submit" class="btn-primary ripple" style="width: 100%; margin-top: 1rem; font-size: 1rem;"
+                    th:text="${product.id != null ? '💾 ' + #messages.msg('product.form.update') : '➕ ' + #messages.msg('product.form.add')}">💾 Yadda Saxla</button>
             </form>
         </div>
     </div>
