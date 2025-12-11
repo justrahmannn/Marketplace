@@ -86,18 +86,20 @@ public class MerchantService {
             List<ProductPhoto> existingPhotos = product.getPhotos();
             if (existingPhotos == null) {
                 existingPhotos = new ArrayList<>();
+                product.setPhotos(existingPhotos);
             }
             
             for (MultipartFile image : productImages) {
                 if (!image.isEmpty()) {
                     String imageUrl = fileStorageService.saveFile(image, "products");
-                    ProductPhoto photo = new ProductPhoto();
-                    photo.setProduct(product);
-                    photo.setUrl(imageUrl);
-                    existingPhotos.add(photo);
+                    if (imageUrl != null) {
+                        ProductPhoto photo = new ProductPhoto();
+                        photo.setProduct(product);
+                        photo.setUrl(imageUrl);
+                        existingPhotos.add(photo);
+                    }
                 }
             }
-            product.setPhotos(existingPhotos);
         }
 
         return productRepository.save(product);
@@ -160,25 +162,26 @@ public class MerchantService {
         Merchant merchant = merchantRepository.findById(merchantId)
                 .orElseThrow(() -> new RuntimeException("Merchant not found"));
         product.setMerchant(merchant);
-        Product savedProduct = productRepository.save(product);
-
-        // Handle image uploads
+        
+        // Handle image uploads before saving product
         if (productImages != null && productImages.length > 0) {
             List<ProductPhoto> photos = new ArrayList<>();
             for (MultipartFile image : productImages) {
                 if (!image.isEmpty()) {
                     String imageUrl = fileStorageService.saveFile(image, "products");
-                    ProductPhoto photo = new ProductPhoto();
-                    photo.setProduct(savedProduct);
-                    photo.setUrl(imageUrl);
-                    photos.add(photo);
+                    if (imageUrl != null) {
+                        ProductPhoto photo = new ProductPhoto();
+                        photo.setProduct(product);
+                        photo.setUrl(imageUrl);
+                        photos.add(photo);
+                    }
                 }
             }
-            savedProduct.setPhotos(photos);
-            savedProduct = productRepository.save(savedProduct);
+            product.setPhotos(photos);
         }
-
-        return savedProduct;
+        
+        // Save product with photos (cascade will handle photos)
+        return productRepository.save(product);
     }
 
     public List<Product> getProducts(@org.springframework.lang.NonNull Long merchantId) {
