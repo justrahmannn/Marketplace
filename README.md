@@ -260,6 +260,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 👥 Authors
 
 - **Rahman** - [justrahmannn](https://github.com/justrahmannn)
+- **Farid** - [afandiyevfarid](https://github.com/afandiyevfarid)
+- **Emin** - [guyFromTV](https://github.com/guyFromTV)
+- **Anar** - [Anar765](https://github.com/Anar765)
 
 ## 🙏 Acknowledgments
 
@@ -267,10 +270,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Google for design inspiration
 - Thymeleaf team for the template engine
 - The open-source community
-
-## 📞 Support
-
-For support, email your-email@example.com or create an issue in the repository.
 
 ---
 
