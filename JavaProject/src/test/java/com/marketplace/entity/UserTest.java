@@ -1,8 +1,8 @@
+package com.marketplace.entity;
 import org.junit.jupiter.api.Test;
 import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
-package com.marketplace.entity;
 
 
 

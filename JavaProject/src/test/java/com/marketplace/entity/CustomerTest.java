@@ -1,8 +1,8 @@
-// filepath: JavaProject/src/test/java/com/marketplace/entity/CustomerTest.java
 package com.marketplace.entity;
 
-
-
+import org.junit.jupiter.api.Test;
+import java.math.BigDecimal;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CustomerTest {
 
@@ -77,7 +77,6 @@ class CustomerTest {
     void testSetAndGetBalance() {
         // Arrange
         Customer customer = new Customer();
-    }
         BigDecimal balance = new BigDecimal("1500.00");
 
         // Act

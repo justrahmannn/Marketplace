@@ -1,10 +1,10 @@
+package com.marketplace.entity;
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/entity/CartTest.java
-package com.marketplace.entity;
 
 
 

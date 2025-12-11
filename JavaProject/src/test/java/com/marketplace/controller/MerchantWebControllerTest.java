@@ -1,3 +1,4 @@
+package com.marketplace.controller;
 import com.marketplace.entity.Order;
 import com.marketplace.entity.Product;
 import com.marketplace.service.MerchantService;
@@ -14,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/controller/MerchantWebControllerTest.java
-package com.marketplace.controller;
 
 
 

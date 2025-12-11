@@ -1,3 +1,4 @@
+package com.marketplace.service;
 import com.marketplace.entity.Customer;
 import com.marketplace.entity.Product;
 import com.marketplace.entity.Wishlist;
@@ -13,7 +14,6 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/service/NotificationServiceTest.java
-package com.marketplace.service;
 
 
 

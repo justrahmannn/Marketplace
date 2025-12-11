@@ -1,3 +1,4 @@
+package com.marketplace.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -5,7 +6,6 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 // filepath: JavaProject/src/test/java/com/marketplace/controller/HomeControllerTest.java
-package com.marketplace.controller;
 
 
 

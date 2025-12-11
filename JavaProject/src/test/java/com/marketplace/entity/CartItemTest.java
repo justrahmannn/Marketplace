@@ -1,8 +1,8 @@
+package com.marketplace.entity;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/entity/CartItemTest.java
-package com.marketplace.entity;
 
 
 

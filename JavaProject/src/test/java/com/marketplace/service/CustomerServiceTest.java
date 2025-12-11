@@ -1,3 +1,4 @@
+package com.marketplace.service;
 import com.marketplace.entity.*;
 import com.marketplace.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/service/CustomerServiceTest.java
-package com.marketplace.service;
 
 
 

@@ -1,3 +1,4 @@
+package com.marketplace.controller;
 import com.marketplace.entity.Product;
 import com.marketplace.service.CustomerService;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/controller/CustomerControllerTest.java
-package com.marketplace.controller;
 
 
 

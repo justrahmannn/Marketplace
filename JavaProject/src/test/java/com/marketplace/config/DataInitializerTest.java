@@ -1,3 +1,4 @@
+package com.marketplace.config;
 import com.marketplace.entity.*;
 import com.marketplace.repository.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +11,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-package com.marketplace.config;
 
 
 

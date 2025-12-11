@@ -1,3 +1,4 @@
+package com.marketplace.service;
 import com.marketplace.entity.Customer;
 import com.marketplace.entity.Merchant;
 import com.marketplace.entity.User;
@@ -15,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/service/AuthServiceTest.java
-package com.marketplace.service;
 
 
 

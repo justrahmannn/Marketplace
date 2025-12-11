@@ -1,3 +1,4 @@
+package com.marketplace.controller;
 import com.marketplace.entity.Customer;
 import com.marketplace.entity.Merchant;
 import com.marketplace.entity.User;
@@ -12,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 // filepath: JavaProject/src/test/java/com/marketplace/controller/AuthControllerTest.java
-package com.marketplace.controller;
 
 
 
