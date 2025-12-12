@@ -136,7 +136,7 @@ a {
 
 /* Navbar */
 .navbar {
-    background: rgba(15, 23, 42, 0.8);
+    background: rgba(16, 26, 49, 0.8);
     backdrop-filter: blur(12px);
     border-bottom: var(--glass-border);
     padding: 1rem 2rem;
