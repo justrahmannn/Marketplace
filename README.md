@@ -21,10 +21,13 @@ A modern, full-featured e-commerce marketplace platform built with Spring Boot t
 
 ### For Merchants
 - 🏪 **Product Management** - Add, edit, delete products with images
+- 🏷️ **Brand Management** - Select existing brands or create new ones on-the-fly
+- ✅ **Required Field Validation** - Brand field is now mandatory to prevent crashes
 - 📊 **Order Management** - Accept, reject, or mark orders as delivered
 - 📸 **Image Upload** - Upload multiple product images
 - 📈 **Dashboard** - View all products and orders in one place
 - 💼 **Company Profile** - Manage company name and merchant details
+- 🔍 **Brand Search** - Find brands by name (case-insensitive)
 
 ### Design & UI
 - 🎨 **Modern Google-Style Design** - Sleek, professional interface
@@ -92,8 +95,10 @@ http://localhost:8080
 - **Spring Data JPA** - Database operations
 - **Spring Web** - RESTful web services
 - **Thymeleaf** - Server-side template engine
+- **PostgreSQL** - Production database (Render deployment)
 - **H2 Database** - Embedded database for development
 - **Lombok** - Reduce boilerplate code
+- **Global Exception Handling** - Centralized error management
 
 ### Frontend
 - **HTML5 & CSS3** - Modern markup and styling
@@ -127,6 +132,7 @@ Marketplace/
 │   │   │   │   ├── config/            # Configuration classes
 │   │   │   │   ├── controller/        # Web controllers
 │   │   │   │   ├── entity/            # JPA entities
+│   │   │   │   ├── exception/         # Custom exceptions & handlers
 │   │   │   │   ├── repository/        # Data repositories
 │   │   │   │   ├── service/           # Business logic
 │   │   │   │   └── MarketplaceApplication.java
@@ -180,7 +186,28 @@ Marketplace/
 - Session-based authentication
 - SQL injection prevention via JPA
 - CSRF protection (configure for production)
-- Input validation
+- Input validation and form field requirements
+- Global exception handling for security errors
+
+## 🛠️ Recent Improvements
+
+### Exception Handling
+- **ResourceNotFoundException** - Custom 404 handling for missing resources
+- **BadRequestException** - Validation and bad request error handling
+- **InsufficientBalanceException** - Custom exception for payment issues
+- **GlobalExceptionHandler** - Centralized error handling with detailed responses
+- **ErrorResponse** - Structured error response with timestamp and details
+
+### Form Validation
+- **Required Brand Field** - Brand selection is now mandatory when adding products
+- **JavaScript Validation** - Dynamic form validation with proper error handling
+- **Toggle Validation** - Smart validation switching between existing and new brand options
+
+### Brand Management Enhancements
+- **Case-Insensitive Search** - Find brands regardless of letter casing
+- **Duplicate Prevention** - Automatic detection and reuse of existing brands
+- **On-the-Fly Creation** - Create new brands directly from product form
+- **Brand Cleanup Utilities** - Tools for maintaining brand data integrity
 
 ## 🌐 Supported Languages
 
@@ -222,7 +249,11 @@ mvn test jacoco:report
 ### Merchant
 - `GET /merchant/dashboard` - Merchant dashboard
 - `GET /merchant/products` - Manage products
-- `POST /merchant/products/save` - Add/update product
+- `GET /merchant/products/add` - Show add product form
+- `POST /merchant/products/add` - Add new product (with brand validation)
+- `GET /merchant/products/edit/{id}` - Show edit product form
+- `POST /merchant/products/edit/{id}` - Update product
+- `POST /merchant/products/delete/{id}` - Delete product
 - `GET /merchant/orders` - View orders
 - `POST /merchant/orders/{id}/accept` - Accept order
 - `POST /merchant/orders/{id}/reject` - Reject order
@@ -247,6 +278,19 @@ docker run -d -p 8080:8080 marketplace-app
 - Configure backup strategy
 - Enable CORS if needed for external APIs
 
+## 🐛 Bug Fixes & Known Issues
+
+### Fixed Issues
+- ✅ **Brand Field Crash** - Fixed application crash when adding products without selecting a brand
+- ✅ **Brand Validation** - Added required field validation for brand selection
+- ✅ **Form Submission** - Improved form validation to prevent incomplete data submission
+- ✅ **Brand Duplicate Check** - Implemented case-insensitive brand name checking
+
+### Important Notes
+- 📝 Always edit files in `src/main/resources/` not `target/classes/` (build output)
+- 🔄 Run `mvn clean install` after major changes to rebuild the project
+- 🌐 The application is deployed on Render with PostgreSQL database
+
 ## 🤝 Contributing
 
 1. Fork the repository
@@ -254,6 +298,13 @@ docker run -d -p 8080:8080 marketplace-app
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
+### Contribution Guidelines
+- Write clear commit messages
+- Add comments to complex code
+- Update README for new features
+- Test thoroughly before submitting PR
+- Follow existing code style and patterns
 
 ## 📄 License
 
