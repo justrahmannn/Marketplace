@@ -914,3 +914,55 @@ button[type="submit"]:has-text("Yoxla") {
         padding: 0.75rem 1.5rem;
     }
 }
+
+/* Star Rating Styles */
+.star-rating {
+    display: inline-flex;
+    gap: 0.25rem;
+    font-size: 1.5rem;
+}
+
+.star-rating .star {
+    color: rgba(255, 255, 255, 0.2);
+    transition: color 0.2s ease;
+}
+
+.star-rating[data-rating="5"] .star:nth-child(-n+5),
+.star-rating[data-rating="4"] .star:nth-child(-n+4),
+.star-rating[data-rating="3"] .star:nth-child(-n+3),
+.star-rating[data-rating="2"] .star:nth-child(-n+2),
+.star-rating[data-rating="1"] .star:nth-child(-n+1) {
+    color: var(--accent-yellow);
+    filter: drop-shadow(0 0 8px rgba(251, 188, 4, 0.5));
+}
+
+/* Star Rating Input (Interactive) */
+.star-rating-input {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+    font-size: 2.5rem;
+}
+
+.star-rating-input input[type="radio"] {
+    display: none;
+}
+
+.star-rating-input label {
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.2);
+    transition: all 0.2s ease;
+    margin-bottom: 0;
+}
+
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label {
+    color: var(--accent-yellow);
+    filter: drop-shadow(0 0 8px rgba(251, 188, 4, 0.5));
+    transform: scale(1.1);
+}
+
+.star-rating-input input[type="radio"]:checked ~ label {
+    color: var(--accent-yellow);
+    filter: drop-shadow(0 0 8px rgba(251, 188, 4, 0.5));
+}

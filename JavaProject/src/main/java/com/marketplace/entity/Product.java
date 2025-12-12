@@ -40,6 +40,15 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductPhoto> photos;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
+
+    @Column(columnDefinition = "DOUBLE DEFAULT 0.0")
+    private Double averageRating = 0.0;
+
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
+    private Integer reviewCount = 0;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 

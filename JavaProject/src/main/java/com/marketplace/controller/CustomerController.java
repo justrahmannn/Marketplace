@@ -2,6 +2,7 @@ package com.marketplace.controller;
 
 import com.marketplace.entity.Product;
 import com.marketplace.service.CustomerService;
+import com.marketplace.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import java.util.List;
 public class CustomerController {
 
     private final CustomerService customerService;
+    private final ReviewService reviewService;
 
     @GetMapping("/products")
     public String listProducts(@RequestParam long userId,
@@ -47,6 +49,8 @@ public class CustomerController {
     @GetMapping("/products/{productId}")
     public String viewProduct(@PathVariable long productId, @RequestParam long userId, Model model) {
         model.addAttribute("product", customerService.getProduct(productId));
+        model.addAttribute("reviews", reviewService.getProductReviews(productId));
+        model.addAttribute("userReview", reviewService.getReviewByProductAndCustomer(productId, userId));
         model.addAttribute("userId", userId);
         return "product_detail";
     }
@@ -55,6 +59,7 @@ public class CustomerController {
     public String viewAccount(@RequestParam long userId, Model model) {
         model.addAttribute("customer", customerService.getCustomer(userId));
         model.addAttribute("orders", customerService.getCustomerOrders(userId));
+        model.addAttribute("reviews", reviewService.getCustomerReviews(userId));
         model.addAttribute("userId", userId);
         return "account";
     }
@@ -147,5 +152,39 @@ public class CustomerController {
     public String removeFromWishlist(@RequestParam long userId, @RequestParam long wishlistId) {
         customerService.removeFromWishlist(wishlistId);
         return "redirect:/customer/wishlist?userId=" + userId;
+    }
+
+    // Review endpoints
+    @PostMapping("/review/add")
+    public String addReview(@RequestParam long userId,
+            @RequestParam long productId,
+            @RequestParam Integer rating,
+            @RequestParam(required = false) String comment,
+            Model model) {
+        try {
+            reviewService.addReview(userId, productId, rating, comment);
+            return "redirect:/customer/products/" + productId + "?userId=" + userId;
+        } catch (RuntimeException e) {
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("product", customerService.getProduct(productId));
+            model.addAttribute("reviews", reviewService.getProductReviews(productId));
+            model.addAttribute("userId", userId);
+            return "product_detail";
+        }
+    }
+
+    @PostMapping("/review/edit/{reviewId}")
+    public String editReview(@PathVariable long reviewId,
+            @RequestParam long userId,
+            @RequestParam Integer rating,
+            @RequestParam(required = false) String comment) {
+        reviewService.updateReview(reviewId, rating, comment);
+        return "redirect:/customer/account?userId=" + userId;
+    }
+
+    @PostMapping("/review/delete/{reviewId}")
+    public String deleteReview(@PathVariable long reviewId, @RequestParam long userId) {
+        reviewService.deleteReview(reviewId);
+        return "redirect:/customer/account?userId=" + userId;
     }
 }

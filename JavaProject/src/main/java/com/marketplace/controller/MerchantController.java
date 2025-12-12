@@ -2,7 +2,9 @@ package com.marketplace.controller;
 
 import com.marketplace.entity.Order;
 import com.marketplace.entity.Product;
+import com.marketplace.entity.Review;
 import com.marketplace.service.MerchantService;
+import com.marketplace.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.util.List;
 public class MerchantController {
 
     private final MerchantService merchantService;
+    private final ReviewService reviewService;
 
     @PostMapping("/{merchantId}/products")
     public ResponseEntity<Product> createProduct(@PathVariable long merchantId, @RequestBody Product product) {
@@ -55,5 +58,10 @@ public class MerchantController {
     @PostMapping("/orders/{orderId}/reject")
     public ResponseEntity<Order> rejectOrder(@PathVariable long orderId, @RequestBody(required = false) String reason) {
         return ResponseEntity.ok(merchantService.rejectOrder(orderId, reason != null ? reason : "Səbəb göstərilməyib"));
+    }
+
+    @GetMapping("/products/{productId}/reviews")
+    public ResponseEntity<List<Review>> getProductReviews(@PathVariable long productId) {
+        return ResponseEntity.ok(reviewService.getProductReviews(productId));
     }
 }
