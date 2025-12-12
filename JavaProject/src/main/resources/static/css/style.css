@@ -129,7 +129,7 @@ a {
 /* Layout */
 .container {
     max-width: 1200px;
-    margin: 0 auto;
+    margin: 0rem auto;
     padding: 2rem;
     width: 100%;
 }
