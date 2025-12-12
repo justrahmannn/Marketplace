@@ -1,35 +1,179 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Marketplace</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace - Connect, Shop, and Grow</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Product+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <div class="auth-container">
-        <div class="card auth-card animate-fade-in" style="text-align: center;">
-            <h1 style="font-size: 3rem; margin-bottom: 1rem;">Marketplace</h1>
-            <p style="color: var(--text-secondary); margin-bottom: 3rem;">Xoş gəlmisiniz! Daxil olmaq üçün rolunuzu
-                seçin</p>
+    <!-- Header -->
+    <header class="google-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">🛒</div>
+                <span class="logo-text">Marketplace</span>
+            </div>
+            <nav class="header-nav">
+                <a href="#features" class="nav-item">Features</a>
+                <a href="#about" class="nav-item">About</a>
+                <a href="#contact" class="nav-item">Contact</a>
+                <div class="language-switcher">
+                    <button class="lang-btn active" data-lang="en">EN</button>
+                    <button class="lang-btn" data-lang="az">AZ</button>
+                </div>
+            </nav>
+        </div>
+    </header>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
-                <a href="/auth/customer/login"
-                    style="padding: 3rem 2rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2)); border-radius: 12px; text-align: center;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🛍️</div>
-                    <h2 style="margin-bottom: 0.5rem;">Alıcı</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Məhsul almaq istəyirəm</p>
+    <!-- Hero Section -->
+    <main class="hero-section">
+        <div class="animated-bg">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title" data-en="Welcome to the Future of Commerce" data-az="Ticərətin Gələcəyinə Xoş Gəlmisiniz">
+                    Welcome to the Future of Commerce
+                </h1>
+                <p class="hero-subtitle" data-en="Connect buyers and sellers in a seamless, modern marketplace experience" data-az="Alıcılar və satıcıları müasir bazar təcrübəsində birləşdirin">
+                    Connect buyers and sellers in a seamless, modern marketplace experience
+                </p>
+            </div>
+
+            <div class="role-cards">
+                <a href="/auth/customer/login" class="role-card customer-card">
+                    <div class="card-shine"></div>
+                    <div class="role-icon">🛍️</div>
+                    <h2 class="role-title" data-en="Customer" data-az="Alıcı">Customer</h2>
+                    <p class="role-description" data-en="Discover and shop from amazing merchants" data-az="Əla satıcılardan kəşf edin və alış-veriş edin">
+                        Discover and shop from amazing merchants
+                    </p>
+                    <div class="card-arrow">→</div>
                 </a>
 
-                <a href="/auth/merchant/login"
-                    style="padding: 3rem 2rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(239, 68, 68, 0.2)); border-radius: 12px; text-align: center;">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🏪</div>
-                    <h2 style="margin-bottom: 0.5rem;">Satıcı</h2>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">Məhsul satmaq istəyirəm</p>
+                <a href="/auth/merchant/login" class="role-card merchant-card">
+                    <div class="card-shine"></div>
+                    <div class="role-icon">🏪</div>
+                    <h2 class="role-title" data-en="Merchant" data-az="Satıcı">Merchant</h2>
+                    <p class="role-description" data-en="Start selling and grow your business" data-az="Satışa başlayın və biznesinizi inkişaf etdirin">
+                        Start selling and grow your business
+                    </p>
+                    <div class="card-arrow">→</div>
                 </a>
             </div>
+
+            <!-- Features Section -->
+            <div id="features" class="features-section">
+                <h3 class="section-title" data-en="Why Choose Us" data-az="Niyə Bizi Seçməlisiniz">Why Choose Us</h3>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="feature-icon">⚡</div>
+                        <h4 data-en="Lightning Fast" data-az="İldırım Sürəti">Lightning Fast</h4>
+                        <p data-en="Optimized for speed and performance" data-az="Sürət və performans üçün optimallaşdırılıb">Optimized for speed and performance</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🔒</div>
+                        <h4 data-en="Secure" data-az="Təhlükəsiz">Secure</h4>
+                        <p data-en="Enterprise-grade security" data-az="Korporativ səviyyəli təhlükəsizlik">Enterprise-grade security</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">🌍</div>
+                        <h4 data-en="Global" data-az="Qlobal">Global</h4>
+                        <p data-en="Reach customers worldwide" data-az="Dünya üzrə müştərilərə çatın">Reach customers worldwide</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">📊</div>
+                        <h4 data-en="Analytics" data-az="Analitika">Analytics</h4>
+                        <p data-en="Powerful insights for growth" data-az="İnkişaf üçün güclü təhlillər">Powerful insights for growth</p>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="google-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>Marketplace</h4>
+                <p class="footer-text" data-en="Building the future of commerce" data-az="Ticərətin gələcəyini qururuq">Building the future of commerce</p>
+            </div>
+            <div class="footer-section">
+                <h4 data-en="Product" data-az="Məhsul">Product</h4>
+                <a href="#" data-en="Features" data-az="Xüsusiyyətlər">Features</a>
+                <a href="#" data-en="Pricing" data-az="Qiymətlər">Pricing</a>
+                <a href="#" data-en="Updates" data-az="Yeniliklər">Updates</a>
+            </div>
+            <div class="footer-section">
+                <h4 data-en="Company" data-az="Şirkət">Company</h4>
+                <a href="#" data-en="About" data-az="Haqqımızda">About</a>
+                <a href="#" data-en="Careers" data-az="Karyera">Careers</a>
+                <a href="#" data-en="Contact" data-az="Əlaqə">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4 data-en="Resources" data-az="Resurslar">Resources</h4>
+                <a href="#" data-en="Documentation" data-az="Sənədlər">Documentation</a>
+                <a href="#" data-en="Help Center" data-az="Yardım Mərkəzi">Help Center</a>
+                <a href="#" data-en="Blog" data-az="Bloq">Blog</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Marketplace. <span data-en="All rights reserved." data-az="Bütün hüquqlar qorunur.">All rights reserved.</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // Language switcher
+        const langButtons = document.querySelectorAll('.lang-btn');
+        let currentLang = 'en';
+
+        langButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                langButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentLang = btn.dataset.lang;
+                updateLanguage(currentLang);
+            });
+        });
+
+        function updateLanguage(lang) {
+            document.querySelectorAll('[data-en]').forEach(element => {
+                if (element.dataset[lang]) {
+                    element.textContent = element.dataset[lang];
+                }
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax effect for gradient orbs
+        document.addEventListener('mousemove', (e) => {
+            const orbs = document.querySelectorAll('.gradient-orb');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            orbs.forEach((orb, index) => {
+                const speed = (index + 1) * 20;
+                orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+    </script>
 </body>
 
 </html>

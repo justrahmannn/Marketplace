@@ -60,15 +60,14 @@
                         <td>
                             <div style="display: flex; gap: 0.5rem;">
                                 <a th:href="@{/merchant/products/edit/{id}(id=${product.id}, merchantId=${merchantId})}"
-                                    style="padding: 0.5rem 1rem; background: rgba(139, 92, 246, 0.2); color: var(--accent-color); border-radius: 6px; font-size: 0.9rem;"
-                                    th:text="#{products.edit}">Redaktə</a>
+                                    class="btn-primary btn-sm"
+                                    th:text="#{products.edit}">✏️ Redaktə</a>
                                 <form th:action="@{/merchant/products/delete/{id}(id=${product.id})}" method="post"
                                     style="margin: 0;">
                                     <input type="hidden" name="merchantId" th:value="${merchantId}" />
-                                    <button type="submit"
+                                    <button type="submit" class="btn-danger btn-sm"
                                         th:onclick="'return confirm(\'' + #{products.delete.confirm} + '\')'"
-                                        style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;"
-                                        th:text="#{products.delete}">Sil</button>
+                                        th:text="#{products.delete}">🗑️ Sil</button>
                                 </form>
                             </div>
                         </td>
