@@ -4,12 +4,17 @@ import com.marketplace.entity.Customer;
 import com.marketplace.entity.Merchant;
 import com.marketplace.entity.Order;
 import com.marketplace.entity.Product;
+import com.marketplace.entity.ProductPhoto;
 import com.marketplace.entity.Brand;
+import com.marketplace.exception.ResourceNotFoundException;
+import com.marketplace.exception.InsufficientBalanceException;
 import com.marketplace.repository.BrandRepository;
 import com.marketplace.repository.CustomerRepository;
 import com.marketplace.repository.MerchantRepository;
 import com.marketplace.repository.OrderRepository;
 import com.marketplace.repository.ProductRepository;
+import com.marketplace.repository.ProductPhotoRepository;
+import org.springframework.web.multipart.MultipartFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,19 +29,35 @@ public class MerchantService {
     private final MerchantRepository merchantRepository;
     private final CustomerRepository customerRepository;
     private final BrandRepository brandRepository;
+    private final FileStorageService fileStorageService;
+    private final ProductPhotoRepository productPhotoRepository;
 
-    public Product createProduct(@org.springframework.lang.NonNull Long merchantId, Product product) {
+    public Product createProduct(@org.springframework.lang.NonNull Long merchantId, Product product,
+            MultipartFile[] images) {
         Merchant merchant = merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new RuntimeException("Merchant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Merchant", "id", merchantId));
         product.setMerchant(merchant);
         Product savedProduct = productRepository.save(product);
+
+        // Save product images
+        if (images != null && images.length > 0) {
+            for (MultipartFile image : images) {
+                if (!image.isEmpty()) {
+                    String imageUrl = fileStorageService.saveFile(image, "products");
+                    ProductPhoto photo = new ProductPhoto();
+                    photo.setProduct(savedProduct);
+                    photo.setUrl(imageUrl);
+                    productPhotoRepository.save(photo);
+                }
+            }
+        }
 
         return savedProduct;
     }
 
     public Product updateProduct(@org.springframework.lang.NonNull Long productId, Product productDetails) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
 
         product.setName(productDetails.getName());
         product.setDetails(productDetails.getDetails());
@@ -62,21 +83,21 @@ public class MerchantService {
 
     public Order acceptOrder(@org.springframework.lang.NonNull Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
         order.setStatus(Order.OrderStatus.ACCEPTED);
         return orderRepository.save(order);
     }
 
     public Order deliverOrder(@org.springframework.lang.NonNull Long orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
         order.setStatus(Order.OrderStatus.DELIVERED);
         return orderRepository.save(order);
     }
 
     public Order rejectOrder(@org.springframework.lang.NonNull Long orderId, String reason) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Order", "id", orderId));
 
         // Refund money to customer
         Customer customer = order.getCustomer();
@@ -95,8 +116,9 @@ public class MerchantService {
     }
 
     // Helper methods for web controller
-    public Product addProduct(@org.springframework.lang.NonNull Long merchantId, Product product) {
-        return createProduct(merchantId, product);
+    public Product addProduct(@org.springframework.lang.NonNull Long merchantId, Product product,
+            MultipartFile[] images) {
+        return createProduct(merchantId, product, images);
     }
 
     public List<Product> getProducts(@org.springframework.lang.NonNull Long merchantId) {
@@ -109,7 +131,7 @@ public class MerchantService {
 
     public Product getProduct(@org.springframework.lang.NonNull Long productId) {
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
         // Initialize photos to avoid LazyInitializationException
         if (product.getPhotos() != null) {
             product.getPhotos().size();
@@ -119,12 +141,16 @@ public class MerchantService {
 
     public Merchant getMerchant(@org.springframework.lang.NonNull Long merchantId) {
         return merchantRepository.findById(merchantId)
-                .orElseThrow(() -> new RuntimeException("Merchant not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Merchant", "id", merchantId));
     }
 
     public Brand createBrand(String name) {
-        Brand brand = new Brand();
-        brand.setName(name);
-        return brandRepository.save(brand);
+        // Check if brand already exists (case-insensitive)
+        return brandRepository.findByNameIgnoreCase(name)
+                .orElseGet(() -> {
+                    Brand brand = new Brand();
+                    brand.setName(name);
+                    return brandRepository.save(brand);
+                });
     }
 }

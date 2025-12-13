@@ -26,6 +26,7 @@
                     style="color: white; font-weight: bold; text-decoration: none;"
                     th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
             </div>
+            <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
         </div>
     </nav>
 
@@ -102,23 +103,22 @@
 
                     <div class="product-actions">
                         <a th:href="@{/customer/products/{id}(id=${product.id}, userId=${userId})}"
-                            class="btn-secondary"
-                            style="padding: 0.5rem 1rem; border-radius: 6px; text-align: center; flex: 1;"
-                            th:text="#{customer.products.view}">Bax</a>
+                            class="btn-secondary btn-sm" style="display: flex; align-items: center; justify-content: center;"
+                            th:text="#{customer.products.view}">👁️ Bax</a>
 
                         <form action="/customer/cart/add" method="post" style="flex: 1;">
                             <input type="hidden" name="userId" th:value="${userId}" />
                             <input type="hidden" name="productId" th:value="${product.id}" />
                             <input type="hidden" name="count" value="1" />
-                            <button type="submit" style="padding: 0.5rem;"
-                                th:text="#{customer.products.add_to_cart}">Səbətə At</button>
+                            <button type="submit" class="btn-success btn-sm ripple"
+                                th:text="#{customer.products.add_to_cart}">🛒 Səbətə At</button>
                         </form>
 
                         <form action="/customer/wishlist/add" method="post" style="width: auto;">
                             <input type="hidden" name="userId" th:value="${userId}" />
                             <input type="hidden" name="productId" th:value="${product.id}" />
-                            <button type="submit"
-                                style="padding: 0.5rem; background: rgba(236, 72, 153, 0.2); color: #ec4899;">♥</button>
+                            <button type="submit" class="btn-icon btn-sm"
+                                style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(236, 72, 153, 0.2)); border: 1px solid rgba(236, 72, 153, 0.4); color: #ec4899;">♥</button>
                         </form>
                     </div>
                 </div>

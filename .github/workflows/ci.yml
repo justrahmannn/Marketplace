@@ -1,0 +1,56 @@
+# A descriptive name for your workflow
+name: Java CI with Maven
+
+# 'on' defines the events that trigger the workflow
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Java Development Kit (JDK) 17
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      # Step 3: Install dependencies and build the project
+      - name: Install dependencies
+        run: mvn clean install -DskipTests
+        working-directory: JavaProject
+
+      # Step 4: Run tests
+      - name: Run tests
+        run: mvn test
+        working-directory: JavaProject
+
+      # Step 5: Package the application
+      - name: Build package
+        run: mvn package -DskipTests
+        working-directory: JavaProject
+
+      # Step 6: Upload test results (runs even if tests fail)
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: JavaProject/target/surefire-reports/
+
+      # Step 7: Upload build artifact
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: marketplace-jar
+          path: JavaProject/target/*.jar

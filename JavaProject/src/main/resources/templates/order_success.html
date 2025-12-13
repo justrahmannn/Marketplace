@@ -31,12 +31,11 @@
                 </div>
             </div>
 
-            <div style="display: flex; gap: 1rem; justify-content: center;">
-                <a th:href="@{/customer/products(userId=${userId})}"
-                    style="padding: 0.75rem 1.5rem; background: var(--accent-color); color: white; border-radius: 8px;">Alış-Verişə
-                    Davam Et</a>
-                <a th:href="@{/customer/account(userId=${userId})}" class="btn-secondary"
-                    style="padding: 0.75rem 1.5rem; border-radius: 8px;">Hesabıma Get</a>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a th:href="@{/customer/products(userId=${userId})}" class="btn-primary">
+                    🛍️ Alış-Verişə Davam Et</a>
+                <a th:href="@{/customer/account(userId=${userId})}" class="btn-secondary">
+                    👤 Hesabıma Get</a>
             </div>
         </div>
     </div>

@@ -25,6 +25,7 @@
                     style="color: inherit; text-decoration: none;"
                     th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : ''}">EN</a>
             </div>
+            <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
         </div>
     </nav>
 
@@ -72,23 +73,19 @@
                                 <form th:action="@{/merchant/orders/{id}/accept(id=${order.id})}" method="post"
                                     style="margin: 0;">
                                     <input type="hidden" name="merchantId" th:value="${merchantId}" />
-                                    <button type="submit"
-                                        style="padding: 0.5rem 1rem; background: rgba(16, 185, 129, 0.2); color: var(--success-color); border-radius: 6px; font-size: 0.9rem;"
-                                        th:text="#{orders.action.accept}">Qəbul
-                                        Et</button>
+                                    <button type="submit" class="btn-success btn-sm ripple"
+                                        th:text="#{orders.action.accept}">✅ Qəbul Et</button>
                                 </form>
                                 <button onclick="showRejectModal(this)" th:attr="data-order-id=${order.id}"
-                                    style="padding: 0.5rem 1rem; background: rgba(239, 68, 68, 0.2); color: var(--danger-color); border-radius: 6px; font-size: 0.9rem;"
-                                    th:text="#{orders.action.reject}">Rədd
-                                    Et</button>
+                                    class="btn-danger btn-sm"
+                                    th:text="#{orders.action.reject}">❌ Rədd Et</button>
                             </div>
                             <div th:if="${order.status.name() == 'ACCEPTED'}">
                                 <form th:action="@{/merchant/orders/{id}/deliver(id=${order.id})}" method="post"
                                     style="margin: 0;">
                                     <input type="hidden" name="merchantId" th:value="${merchantId}" />
-                                    <button type="submit"
-                                        style="padding: 0.5rem 1rem; background: rgba(59, 130, 246, 0.2); color: #60a5fa; border-radius: 6px; font-size: 0.9rem;"
-                                        th:text="#{orders.action.deliver}">Çatdır</button>
+                                    <button type="submit" class="btn-primary btn-sm ripple"
+                                        th:text="#{orders.action.deliver}">🚚 Çatdır</button>
                                 </form>
                             </div>
                             <span

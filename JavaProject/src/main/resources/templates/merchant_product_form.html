@@ -33,6 +33,7 @@
                     th:if="${product.id != null}" style="color: inherit; text-decoration: none;"
                     th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : ''}">EN</a>
             </div>
+            <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
         </div>
     </nav>
 
@@ -87,7 +88,7 @@
                     <div class="form-group">
                         <label th:text="#{product.form.brand}">Brend</label>
                         <div style="display: flex; gap: 0.5rem;">
-                            <select th:field="*{brand.id}" id="brandSelect" style="flex: 1;">
+                            <select th:field="*{brand.id}" id="brandSelect" style="flex: 1;" required>
                                 <option value="" th:text="#{product.form.select}">Seçin...</option>
                                 <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}">Brend
                                 </option>
@@ -115,9 +116,17 @@
                     </div>
                 </div>
 
-                <button type="submit" style="width: 100%; margin-top: 1rem;"
-                    th:text="${product.id != null ? #messages.msg('product.form.update') : #messages.msg('product.form.add')}">Əlavə
-                    Et</button>
+                <div class="form-group">
+                    <label>Məhsul Şəkilləri</label>
+                    <input type="file" name="images" multiple accept="image/*" 
+                        style="padding: 0.75rem; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); border-radius: 8px; color: var(--text-primary);" />
+                    <small style="color: var(--text-secondary); display: block; margin-top: 0.5rem;">
+                        Bir və ya bir neçə şəkil seçə bilərsiniz (JPG, PNG)
+                    </small>
+                </div>
+
+                <button type="submit" class="btn-primary ripple" style="width: 100%; margin-top: 1rem; font-size: 1rem;"
+                    th:text="${product.id != null ? '💾 ' + #messages.msg('product.form.update') : '➕ ' + #messages.msg('product.form.add')}">💾 Yadda Saxla</button>
             </form>
         </div>
     </div>
@@ -137,6 +146,7 @@
             if (section.style.display === 'none') {
                 section.style.display = 'block';
                 select.disabled = true;
+                select.required = false;
                 select.value = '';
                 btn.textContent = cancelText;
                 btn.style.background = 'var(--danger-color)';
@@ -144,6 +154,7 @@
             } else {
                 section.style.display = 'none';
                 select.disabled = false;
+                select.required = true;
                 btn.textContent = newText;
                 btn.style.background = 'var(--accent-color)';
                 nameInput.value = '';

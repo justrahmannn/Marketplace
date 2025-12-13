@@ -25,7 +25,8 @@
                 <a th:href="@{/customer/products/{id}(id=${product.id}, userId=${userId}, lang='en')}"
                     style="color: white; font-weight: bold; text-decoration: none;"
                     th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
-            </div>
+                </div>
+                <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
         </div>
     </nav>
 
@@ -62,11 +63,11 @@
                             style="color: var(--text-primary);">Kateqoriya</span></div>
                 </div>
 
-                <form action="/customer/cart/add" method="post" style="display: flex; gap: 1rem;">
+                <form action="/customer/cart/add" method="post" style="display: flex; gap: 1rem; align-items: stretch;">
                     <input type="hidden" name="userId" th:value="${userId}" />
                     <input type="hidden" name="productId" th:value="${product.id}" />
-                    <input type="number" name="count" value="1" min="1" style="width: 80px;" />
-                    <button type="submit" style="flex: 1;">Səbətə Əlavə Et</button>
+                    <input type="number" name="count" value="1" min="1" style="width: 100px; flex-shrink: 0;" />
+                    <button type="submit" class="btn-success ripple" style="flex: 1;">🛒 Səbətə Əlavə Et</button>
                 </form>
             </div>
         </div>

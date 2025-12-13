@@ -148,7 +148,7 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("✓ " + productRepository.count() + " məhsul əlavə edildi");
     }
 
-    private Merchant createMerchant(String name, String surname, String companyName) {
+    Merchant createMerchant(String name, String surname, String companyName) {
         Merchant merchant = new Merchant();
         merchant.setName(name);
         merchant.setSurname(surname);
@@ -159,19 +159,19 @@ public class DataInitializer implements CommandLineRunner {
         return merchantRepository.save(merchant);
     }
 
-    private Category createCategory(String name) {
+    Category createCategory(String name) {
         Category category = new Category();
         category.setName(name);
         return categoryRepository.save(category);
     }
 
-    private Brand createBrand(String name) {
+    Brand createBrand(String name) {
         Brand brand = new Brand();
         brand.setName(name);
         return brandRepository.save(brand);
     }
 
-    private void createProduct(Merchant merchant, Category category, Brand brand, String name, String details, String imageUrl, BigDecimal price, Integer stock) {
+    void createProduct(Merchant merchant, Category category, Brand brand, String name, String details, String imageUrl, BigDecimal price, Integer stock) {
         Product product = new Product();
         product.setMerchant(merchant);
         product.setCategory(category);

@@ -1,6 +1,9 @@
 package com.marketplace.service;
 
 import com.marketplace.entity.*;
+import com.marketplace.exception.ResourceNotFoundException;
+import com.marketplace.exception.BadRequestException;
+import com.marketplace.exception.InsufficientBalanceException;
 import com.marketplace.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,7 +31,7 @@ public class CustomerService {
         return cartRepository.findByCustomerId(customerId)
                 .orElseGet(() -> {
                     Customer customer = customerRepository.findById(customerId)
-                            .orElseThrow(() -> new RuntimeException("Customer not found"));
+                            .orElseThrow(() -> new ResourceNotFoundException("Customer", "id", customerId));
                     Cart cart = new Cart();
                     cart.setCustomer(customer);
                     return cartRepository.save(cart);
@@ -39,7 +42,7 @@ public class CustomerService {
             @org.springframework.lang.NonNull Long productId, Integer count) {
         Cart cart = getCart(customerId);
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
 
         Optional<CartItem> existingItem = cart.getItems().stream()
                 .filter(item -> item.getProduct().getId().equals(productId))

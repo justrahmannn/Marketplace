@@ -18,7 +18,7 @@ public class MerchantController {
 
     @PostMapping("/{merchantId}/products")
     public ResponseEntity<Product> createProduct(@PathVariable long merchantId, @RequestBody Product product) {
-        return ResponseEntity.ok(merchantService.createProduct(merchantId, product));
+        return ResponseEntity.ok(merchantService.createProduct(merchantId, product, null));
     }
 
     @PutMapping("/products/{productId}")

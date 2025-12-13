@@ -27,6 +27,7 @@
                     style="color: white; font-weight: bold; text-decoration: none;"
                     th:style="${#locale.language == 'en' ? 'font-weight: bold; color: var(--accent-color);' : 'color: white;'}">EN</a>
             </div>
+            <a th:href="@{/auth/logout}" class="nav-link" style="margin-left:1rem;">Çıxış</a>
         </div>
     </nav>
 
@@ -42,10 +43,8 @@
             <h2 style="margin-bottom: 1rem;" th:text="#{customer.cart.empty.title}">Səbətiniz boşdur</h2>
             <p style="color: var(--text-secondary); margin-bottom: 2rem;" th:text="#{customer.cart.empty.message}">Hələ
                 heç nə əlavə etməmisiniz.</p>
-            <a th:href="@{/customer/products(userId=${userId})}" class="btn-secondary"
-                style="padding: 0.75rem 1.5rem; border-radius: 8px; background: var(--accent-color); color: white;"
-                th:text="#{customer.cart.start_shopping}">Alış-Verişə
-                Başla</a>
+            <a th:href="@{/customer/products(userId=${userId})}" class="btn-primary"
+                th:text="#{customer.cart.start_shopping}">🛍️ Alış-Verişə Başla</a>
         </div>
 
         <div th:unless="${cart.items.empty}" style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
@@ -94,7 +93,7 @@
                 <div style="border-top: var(--glass-border); margin: 1rem 0;"></div>
                 <form action="/customer/order" method="post">
                     <input type="hidden" name="userId" th:value="${userId}" />
-                    <button type="submit" th:text="#{customer.cart.checkout}">Ödənişə Keç</button>
+                    <button type="submit" class="btn-success ripple" style="font-size: 1rem;" th:text="#{customer.cart.checkout}">🛒 Ödənişə Keç</button>
                 </form>
             </div>
         </div>
