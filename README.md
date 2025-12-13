@@ -311,7 +311,11 @@ docker run -d -p 8080:8080 marketplace-app
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 👥 Author
+- **Farid** - [afandiyevfarid](https://github.com/afandiyevfarid)
+- **Emin** - [guyFromTV](https://github.com/guyFromTV)
+- **Anar** - [Anar765](https://github.com/Anar765)
 - **Rahman** - [justrahmannn](https://github.com/justrahmannn)
+- 
 ## 🙏 Acknowledgments
 
 - Spring Boot team for the excellent framework
