@@ -315,7 +315,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - **Farid** - [afandiyevfarid](https://github.com/afandiyevfarid)
 - **Emin** - [guyFromTV](https://github.com/guyFromTV)
 - **Anar** - [Anar765](https://github.com/Anar765)
-- 
+  
 ## 🙏 Acknowledgments
 
 - Spring Boot team for the excellent framework
